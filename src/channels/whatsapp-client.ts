@@ -463,13 +463,26 @@ client.on('auth_failure', (msg: string) => {
 });
 
 client.on('disconnected', (reason: string) => {
-    log('WARN', `WhatsApp disconnected: ${reason}`);
+    log('WARN', `WhatsApp disconnected: ${reason}, attempting reconnect in 10s...`);
 
     // Remove ready flag
     const readyFile = path.join(TINYCLAW_HOME, 'channels/whatsapp_ready');
     if (fs.existsSync(readyFile)) {
         fs.unlinkSync(readyFile);
     }
+
+    setTimeout(() => {
+        log('INFO', 'Reconnecting WhatsApp client...');
+        client.initialize();
+    }, 10000);
+});
+
+// Catch unhandled errors so we can see what kills the bot
+process.on('unhandledRejection', (reason) => {
+    log('ERROR', `Unhandled rejection: ${reason}`);
+});
+process.on('uncaughtException', (error) => {
+    log('ERROR', `Uncaught exception: ${error.message}\n${error.stack}`);
 });
 
 // Graceful shutdown

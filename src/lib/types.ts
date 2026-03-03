@@ -90,6 +90,8 @@ export interface Conversation {
     startTime: number;
     // Track how many mentions each agent sent out (for inbox draining)
     outgoingMentions: Map<string, number>;
+    // Track agents that have been enqueued but haven't finished responding
+    pendingAgents: Set<string>;
 }
 
 export interface ResponseData {

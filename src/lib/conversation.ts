@@ -168,8 +168,8 @@ export function completeConversation(conv: Conversation): void {
         finalResponse = finalResponse.replace(/\[send_file:\s*[^\]]+\]/g, '').trim();
     }
 
-    // Remove [@agent: ...] tags from final response
-    finalResponse = finalResponse.replace(/\[@\S+?:\s*[\s\S]*?\]/g, '').trim();
+    // Convert [@agent: ...] tags to readable format instead of stripping them
+    finalResponse = finalResponse.replace(/\[@(\S+?):\s*([\s\S]*?)\]/g, '→ @$1: $2').trim();
 
     // Handle long responses — send as file attachment
     const { message: responseMessage, files: allFiles } = handleLongResponse(finalResponse, outboundFiles);

@@ -20,8 +20,8 @@ app.post('/api/message', async (c) => {
     const resolvedSender = sender || 'API';
     const messageId = clientMessageId || `api_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 
-    // Prepend channel and sender context only when explicitly provided
-    const fullMessage = (channel && sender) ? `[${channel}/${sender}]: ${message}` : message;
+    // Append channel and sender context as a signature
+    const fullMessage = (channel && sender) ? `${message}\n\n— ${sender} via ${channel}` : message;
 
     enqueueMessage({
         channel: resolvedChannel,

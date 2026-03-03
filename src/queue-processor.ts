@@ -148,8 +148,9 @@ async function processMessage(dbMsg: DbMessage): Promise<void> {
         if (isInternal && messageData.conversationId) {
             const conv = conversations.get(messageData.conversationId);
             if (conv) {
-                // pending includes this message (not yet decremented), so subtract 1 for "others"
-                const othersPending = conv.pending - 1;
+                // Count agents that have been enqueued but haven't responded yet, excluding this agent
+                const respondedAgents = new Set(conv.responses.map(r => r.agentId));
+                const othersPending = [...conv.pendingAgents].filter(a => a !== agentId && !respondedAgents.has(a)).length;
                 if (othersPending > 0) {
                     message += `\n\n------\n\n[${othersPending} other teammate response(s) are still being processed and will be delivered when ready. Do not re-mention teammates who haven't responded yet.]`;
                 }
@@ -233,6 +234,7 @@ async function processMessage(dbMsg: DbMessage): Promise<void> {
                 teamContext,
                 startTime: Date.now(),
                 outgoingMentions: new Map(),
+                pendingAgents: new Set([agentId]),
             };
             conversations.set(convId, conv);
             log('INFO', `Conversation started: ${convId} (team: ${teamContext.team.name})`);
@@ -242,6 +244,7 @@ async function processMessage(dbMsg: DbMessage): Promise<void> {
         // Record this agent's response
         conv.responses.push({ agentId, response });
         conv.totalMessages++;
+        conv.pendingAgents.delete(agentId);
         collectFiles(response, conv.files);
 
         // Check for teammate mentions
@@ -254,6 +257,7 @@ async function processMessage(dbMsg: DbMessage): Promise<void> {
             incrementPending(conv, teammateMentions.length);
             conv.outgoingMentions.set(agentId, teammateMentions.length);
             for (const mention of teammateMentions) {
+                conv.pendingAgents.add(mention.teammateId);
                 log('INFO', `@${agentId} → @${mention.teammateId}`);
                 emitEvent('chain_handoff', { teamId: conv.teamContext.teamId, fromAgent: agentId, toAgent: mention.teammateId });
 

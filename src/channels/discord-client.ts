@@ -475,6 +475,14 @@ setInterval(() => {
     }
 }, 8000);
 
+// Catch unhandled errors so we can see what kills the bot
+process.on('unhandledRejection', (reason) => {
+    log('ERROR', `Unhandled rejection: ${reason}`);
+});
+process.on('uncaughtException', (error) => {
+    log('ERROR', `Uncaught exception: ${error.message}\n${error.stack}`);
+});
+
 // Graceful shutdown
 process.on('SIGINT', () => {
     log('INFO', 'Shutting down Discord client...');
