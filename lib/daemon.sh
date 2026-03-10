@@ -18,19 +18,14 @@ start_daemon() {
         PUPPETEER_SKIP_DOWNLOAD=true npm install
     fi
 
-    # Build TypeScript if any src file is newer than its dist counterpart
+    # Build TypeScript if any package isn't built
     local needs_build=false
-    if [ ! -d "$SCRIPT_DIR/dist" ]; then
-        needs_build=true
-    else
-        for ts_file in "$SCRIPT_DIR"/src/*.ts; do
-            local js_file="$SCRIPT_DIR/dist/$(basename "${ts_file%.ts}.js")"
-            if [ ! -f "$js_file" ] || [ "$ts_file" -nt "$js_file" ]; then
-                needs_build=true
-                break
-            fi
-        done
-    fi
+    for pkg in core teams server channels main; do
+        if [ ! -d "$SCRIPT_DIR/packages/$pkg/dist" ]; then
+            needs_build=true
+            break
+        fi
+    done
     if [ "$needs_build" = true ]; then
         echo -e "${YELLOW}Building TypeScript...${NC}"
         cd "$SCRIPT_DIR"
@@ -167,7 +162,7 @@ start_daemon() {
     done
 
     # Queue pane
-    tmux send-keys -t "$TMUX_SESSION:${win_base}.$pane_idx" "cd '$SCRIPT_DIR' && node dist/queue-processor.js" C-m
+    tmux send-keys -t "$TMUX_SESSION:${win_base}.$pane_idx" "cd '$SCRIPT_DIR' && node packages/main/dist/index.js" C-m
     tmux select-pane -t "$TMUX_SESSION:${win_base}.$pane_idx" -T "Queue"
     pane_idx=$((pane_idx + 1))
 
@@ -276,7 +271,7 @@ stop_daemon() {
     for ch in "${ALL_CHANNELS[@]}"; do
         pkill -f "$(channel_script "$ch")" || true
     done
-    pkill -f "dist/queue-processor.js" || true
+    pkill -f "packages/main/dist/index.js" || true
     pkill -f "heartbeat-cron.sh" || true
 
     echo -e "${GREEN}✓ TinyClaw stopped${NC}"
@@ -345,7 +340,7 @@ status_daemon() {
     done
 
     # Core processes
-    if pgrep -f "dist/queue-processor.js" > /dev/null; then
+    if pgrep -f "packages/main/dist/index.js" > /dev/null; then
         echo -e "Queue Processor: ${GREEN}Running${NC}"
     else
         echo -e "Queue Processor: ${RED}Not Running${NC}"

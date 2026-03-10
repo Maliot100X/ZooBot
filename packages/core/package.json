@@ -1,0 +1,17 @@
+{
+  "name": "@tinyclaw/core",
+  "version": "0.0.10",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.6.2",
+    "dotenv": "^16.4.0",
+    "jsonrepair": "^3.13.2"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13"
+  }
+}
