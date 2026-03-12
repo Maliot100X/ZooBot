@@ -118,12 +118,15 @@ jobs:
         id: release_notes
         run: |
           VERSION="${{ steps.get_version.outputs.version }}"
-          # git tag -l --format reads the annotated tag object directly,
-          # unlike for-each-ref which can dereference to the commit in CI
-          TAG_MESSAGE=$(git tag -l --format='%(contents)' "$VERSION")
-          if [ -n "$TAG_MESSAGE" ]; then
-            printf '%s\n' "$TAG_MESSAGE" > release_notes.md
-          else
+          # Use git cat-file to read the raw annotated tag object directly,
+          # bypassing %(contents) which can dereference to the commit message
+          TAG_OBJ=$(git rev-parse "refs/tags/$VERSION" 2>/dev/null)
+          TAG_TYPE=$(git cat-file -t "$TAG_OBJ" 2>/dev/null)
+          if [ "$TAG_TYPE" = "tag" ]; then
+            # Annotated tag: extract message body (everything after the blank line)
+            git cat-file -p "$TAG_OBJ" | sed '1,/^$/d' > release_notes.md
+          fi
+          if [ ! -s release_notes.md ]; then
             cat > release_notes.md <<EOF
           ## TinyClaw $VERSION
 
