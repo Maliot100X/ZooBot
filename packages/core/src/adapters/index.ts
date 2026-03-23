@@ -4,6 +4,8 @@ import { AgentAdapter } from './types';
 import { claudeAdapter } from './claude';
 import { codexAdapter } from './codex';
 import { opencodeAdapter } from './opencode';
+import { groqAdapter } from './groq';
+import { openaiAdapter } from './openai';
 
 /** Provider → adapter registry, built automatically from adapter declarations. */
 const registry = new Map<string, AgentAdapter>();
@@ -18,6 +20,8 @@ function register(adapter: AgentAdapter) {
 register(claudeAdapter);
 register(codexAdapter);
 register(opencodeAdapter);
+register(groqAdapter);
+register(openaiAdapter);
 
 export function getAdapter(provider: string): AgentAdapter | undefined {
     return registry.get(provider);

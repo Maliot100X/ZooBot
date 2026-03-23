@@ -1,9 +1,9 @@
 export interface CustomProvider {
     name: string;
-    harness: 'claude' | 'codex';  // which CLI to invoke
-    base_url: string;
+    harness: 'claude' | 'codex' | 'groq' | 'openai' | 'openai-compatible';  // which CLI to invoke or 'groq'/'openai' for direct API
+    base_url?: string;  // For OpenAI-compatible providers
     api_key: string;
-    model?: string;               // model name to pass to the CLI
+    model?: string;               // model name to pass to the CLI or API
 }
 
 export interface AgentConfig {

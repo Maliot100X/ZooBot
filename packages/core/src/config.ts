@@ -4,12 +4,17 @@ import { jsonrepair } from 'jsonrepair';
 import { Settings, AgentConfig, TeamConfig, MODEL_ALIASES } from './types';
 
 export const SCRIPT_DIR = path.resolve(__dirname, '../../..');
-export const TINYAGI_HOME = process.env.TINYAGI_HOME
-    || path.join(require('os').homedir(), '.tinyagi');
-export const LOG_FILE = path.join(TINYAGI_HOME, 'logs/queue.log');
-export const SETTINGS_FILE = path.join(TINYAGI_HOME, 'settings.json');
-export const CHATS_DIR = path.join(TINYAGI_HOME, 'chats');
-export const FILES_DIR = path.join(TINYAGI_HOME, 'files');
+export const ZOOBOT_HOME = process.env.ZOOBOT_HOME
+    || process.env.TINYAGI_HOME  // Backwards compatibility
+    || path.join(require('os').homedir(), '.zoobot');
+export const LOG_FILE = path.join(ZOOBOT_HOME, 'logs/queue.log');
+export const SETTINGS_FILE = path.join(ZOOBOT_HOME, 'settings.json');
+export const CHATS_DIR = path.join(ZOOBOT_HOME, 'chats');
+export const FILES_DIR = path.join(ZOOBOT_HOME, 'files');
+
+// Backwards compatibility aliases
+export const TINYAGI_HOME = ZOOBOT_HOME;
+export const TINYAGI_CONFIG = SETTINGS_FILE;
 
 export function getSettings(): Settings {
     try {
@@ -48,6 +53,22 @@ export function getSettings(): Settings {
             } else if (settings?.models?.anthropic) {
                 if (!settings.models) settings.models = {};
                 settings.models.provider = 'anthropic';
+            } else if (settings?.models?.groq) {
+                if (!settings.models) settings.models = {};
+                settings.models.provider = 'groq';
+            } else if (settings?.custom_providers) {
+                // Check custom providers for groq or openai-compatible
+                const providerKeys = Object.keys(settings.custom_providers);
+                if (providerKeys.length > 0) {
+                    const firstProvider = settings.custom_providers[providerKeys[0]];
+                    if (firstProvider.harness === 'groq') {
+                        if (!settings.models) settings.models = {};
+                        settings.models.provider = 'groq';
+                    } else if (firstProvider.harness === 'openai-compatible') {
+                        if (!settings.models) settings.models = {};
+                        settings.models.provider = 'openai-compatible';
+                    }
+                }
             }
         }
 
@@ -65,19 +86,23 @@ export function getDefaultAgentFromModels(settings: Settings): AgentConfig {
     const provider = settings?.models?.provider || 'anthropic';
     let model = '';
     if (provider === 'openai') {
-        model = settings?.models?.openai?.model || 'gpt-5.3-codex';
+        model = settings?.models?.openai?.model || 'gpt-4o';
     } else if (provider === 'opencode') {
         model = settings?.models?.opencode?.model || 'sonnet';
+    } else if (provider === 'groq') {
+        model = settings?.models?.groq?.model || 'llama-3.3-70b-versatile';
+    } else if (provider === 'openai-compatible') {
+        model = settings?.models?.openai?.model || 'gpt-4o';
     } else {
         model = settings?.models?.anthropic?.model || 'sonnet';
     }
 
     // Get workspace path from settings or use default
-    const workspacePath = settings?.workspace?.path || path.join(require('os').homedir(), 'tinyagi-workspace');
-    const defaultAgentDir = path.join(workspacePath, 'tinyagi');
+    const workspacePath = settings?.workspace?.path || path.join(require('os').homedir(), 'zoo-bot-workspace');
+    const defaultAgentDir = path.join(workspacePath, 'zoobot');
 
     return {
-        name: 'TinyAGI Agent',
+        name: 'ZooBot Agent',
         provider,
         model,
         working_directory: defaultAgentDir,

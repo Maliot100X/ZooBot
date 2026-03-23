@@ -1,36 +1,53 @@
 {
-  "name": "tinyagi",
-  "version": "0.0.16",
-  "description": "Multi-agent, multi-team, multi-channel 24/7 AI assistant",
+  "name": "@zoobot/core",
+  "version": "1.0.0",
+  "description": "ZooBot - Open Source AI Agent Framework with Free LLM Support",
+  "author": "ZooBot Team",
+  "license": "MIT",
+  "dependencies": {
+    "better-sqlite3": "^11.8.0",
+    "bull": "^4.16.5",
+    "dotenv": "^16.4.7",
+    "jsonrepair": "^0.31.0",
+    "uuid": "^11.1.0",
+    "winston": "^3.17.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/node": "^22.13.10",
+    "@types/uuid": "^10.0.0",
+    "concurrently": "^9.2.1",
+    "nodemon": "^3.1.9",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "dev:cli": "tsx watch packages/cli/src/agent.ts",
+    "dev:server": "tsx watch packages/server/src/index.ts",
+    "dev:chatroom": "npm run dev:chatroom -w @zoobot/visualizer",
+    "chat": "tsx packages/cli/src/agent.ts",
+    "server": "tsx packages/server/src/index.ts",
+    "chatroom": "npm run chatroom -w @zoobot/visualizer",
+    "agent": "tsx packages/cli/src/agent.ts",
+    "team": "tsx packages/cli/src/team.ts",
+    "provider": "tsx packages/cli/src/provider.ts",
+    "schedule": "tsx packages/cli/src/schedule.ts",
+    "pairing": "tsx packages/cli/src/pairing.ts",
+    "messaging": "tsx packages/cli/src/messaging.ts",
+    "update": "tsx packages/cli/src/update.ts",
+    "setup": "tsx packages/cli/src/setup.ts",
+    "visualizer": "npm run chatroom -w @zoobot/visualizer",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
   "workspaces": [
     "packages/*"
   ],
-  "bin": {
-    "tinyagi": "packages/cli/bin/tinyagi.mjs"
-  },
-  "scripts": {
-    "build": "tsc --build",
-    "dev": "concurrently -k -n core,teams,server,main \"npm run dev -w @tinyagi/core\" \"npm run dev -w @tinyagi/teams\" \"npm run dev -w @tinyagi/server\" \"npm run dev -w @tinyagi/main\"",
-    "build:core": "npm run build -w @tinyagi/core",
-    "build:teams": "npm run build -w @tinyagi/teams",
-    "build:channels": "npm run build -w @tinyagi/channels",
-    "build:server": "npm run build -w @tinyagi/server",
-    "build:visualizer": "npm run build -w @tinyagi/visualizer",
-    "start": "npm run start -w @tinyagi/main",
-    "discord": "npm run discord -w @tinyagi/channels",
-    "telegram": "npm run telegram -w @tinyagi/channels",
-    "whatsapp": "npm run whatsapp -w @tinyagi/channels",
-    "server": "npm run start -w @tinyagi/server",
-    "visualize": "npm run visualize -w @tinyagi/visualizer",
-    "chatroom": "npm run chatroom -w @tinyagi/visualizer"
-  },
-  "devDependencies": {
-    "@types/node": "^25.2.2",
-    "concurrently": "^9.2.1",
-    "nodemon": "^3.1.9",
-    "typescript": "^5.9.3"
-  },
-  "dependencies": {
-    "croner": "^10.0.1"
+  "nx": {
+    "includedScripts": []
   }
 }
