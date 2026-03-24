@@ -312,6 +312,30 @@ export default function SettingsPage() {
                 <p className="font-medium mb-1">Global provider</p>
                 <code className="text-xs">{settings.models?.provider || "anthropic"}</code>
               </div>
+              <div className="rounded border p-3 bg-muted/30 text-sm space-y-2">
+                <p className="font-medium">OpenAI / Codex connect guidance</p>
+                {providerAuthState?.openai.codex.cli_installed ? (
+                  providerAuthState?.openai.codex.auth_file_exists || providerAuthState?.openai.configured_api_key ? (
+                    <p className="text-xs text-muted-foreground">
+                      OpenAI appears connectable on this machine. If ZooBot is set to use the openai provider, the next remaining step is choosing whether to use ChatGPT/Codex login or an API key-backed model configuration.
+                    </p>
+                  ) : (
+                    <div className="text-xs text-muted-foreground space-y-1">
+                      <p>Codex CLI is installed, but no OpenAI auth is configured yet.</p>
+                      <p>Recommended next step on the server:</p>
+                      <pre className="bg-background rounded px-2 py-1 overflow-x-auto">codex login --device-auth</pre>
+                      <p>Fallback with API key in ZooBot settings:</p>
+                      <pre className="bg-background rounded px-2 py-1 overflow-x-auto">zoobot provider openai --model gpt-5.3-codex --auth-token YOUR_OPENAI_KEY</pre>
+                    </div>
+                  )
+                ) : (
+                  <div className="text-xs text-muted-foreground space-y-1">
+                    <p>Codex CLI is not installed on this machine.</p>
+                    <p>Install it first:</p>
+                    <pre className="bg-background rounded px-2 py-1 overflow-x-auto">npm install -g @openai/codex</pre>
+                  </div>
+                )}
+              </div>
               <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                 <div>
                   <p className="font-medium mb-1">OpenAI / Codex</p>
