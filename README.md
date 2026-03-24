@@ -81,18 +81,27 @@ That's it. ZooBot auto-creates default settings, starts the daemon, and opens Zo
 ZooBot supports Groq's free API - no Claude Code or Codex CLI needed!
 
 1. Get your free API key from [console.groq.com](https://console.groq.com)
-2. Add it to your settings:
+2. Set it up:
 
-```bash
-zoobot groq set-key YOUR_GROQ_API_KEY
-# or edit ~/.zoobot/settings.json:
-# "models": { "provider": "groq", "groq": { "model": "llama-3.3-70b-versatile" } }
+```
+zoobot provider groq
+zoobot provider groq --auth-token YOUR_GROQ_API_KEY
 ```
 
-Available free models:
-- `llama-3.3-70b-versatile` (recommended)
-- `llama-3.1-8b-instant`
-- `mixtral-8x7b-32768`
+3. Set a model (all free):
+
+```
+zoobot model llama-3.3-70b-versatile
+```
+
+Or use any model directly:
+
+```
+zoobot model mixtral-8x7b-32768
+zoobot model gemma2-9b-it
+```
+
+**Available free models:** llama-3.3-70b-versatile, llama-3.1-70b-versatile, mixtral-8x7b-32768, gemma2-9b-it
 
 <details>
 <summary><b>Development (run from source repo)</b></summary>
