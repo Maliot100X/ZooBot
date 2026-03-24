@@ -46,6 +46,7 @@ export interface Settings {
         openai?: {
             model?: string;
             auth_token?: string;
+            base_url?: string;
         };
         opencode?: {
             model?: string;

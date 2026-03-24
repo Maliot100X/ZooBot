@@ -1,6 +1,7 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
+import { execFileSync } from 'child_process';
 import { Hono } from 'hono';
 import { Settings } from '@zoobot/core';
 import { SETTINGS_FILE, ZOOBOT_HOME, getSettings, ensureAgentDirectory, copyDirSync, SCRIPT_DIR } from '@zoobot/core';
@@ -15,6 +16,32 @@ export function mutateSettings(fn: (settings: Settings) => void): Settings {
 }
 
 const app = new Hono();
+function detectOpenAiAuth() {
+    try {
+        const output = execFileSync('codex', ['login', '--help'], {
+            encoding: 'utf8',
+            stdio: ['ignore', 'pipe', 'ignore'],
+            timeout: 5000,
+        });
+        const authFile = path.join(ZOOBOT_HOME, '..', '.codex', 'auth.json');
+        const expanded = path.resolve(authFile.replace('/../', '/'));
+        return {
+            cli_installed: true,
+            auth_file_path: expanded,
+            auth_file_exists: fs.existsSync(expanded),
+            supports_device_auth: output.includes('--device-auth'),
+        };
+    } catch {
+        const authFile = path.resolve(path.join(ZOOBOT_HOME, '..', '.codex', 'auth.json'));
+        return {
+            cli_installed: false,
+            auth_file_path: authFile,
+            auth_file_exists: fs.existsSync(authFile),
+            supports_device_auth: false,
+        };
+    }
+}
+
 
 function expandHomePath(input?: string): string | undefined {
     if (!input) return input;
@@ -26,6 +53,22 @@ function expandHomePath(input?: string): string | undefined {
     if (input.startsWith('$HOME/')) return path.join(home, input.slice(6));
     return input;
 }
+
+// GET /api/provider-auth-state
+app.get('/api/provider-auth-state', (c) => {
+    const settings = getSettings();
+    return c.json({
+        openai: {
+            configured_api_key: !!settings.models?.openai?.auth_token,
+            configured_base_url: settings.models?.openai?.base_url || null,
+            codex: detectOpenAiAuth(),
+        },
+        groq: {
+            configured_api_key: !!settings.models?.groq?.auth_token,
+            configured_base_url: settings.models?.groq?.base_url || null,
+        },
+    });
+});
 
 // GET /api/settings
 app.get('/api/settings', (c) => {
