@@ -312,6 +312,17 @@ export default function SettingsPage() {
                 <p className="font-medium mb-1">Global provider</p>
                 <code className="text-xs">{settings.models?.provider || "anthropic"}</code>
               </div>
+              <div className="rounded border p-3 bg-muted/30 text-sm space-y-3">
+                <p className="font-medium">OpenAI / Codex quick test commands</p>
+                <div className="text-xs text-muted-foreground space-y-2">
+                  <p>Use these on the server to verify the current machine-side state:</p>
+                  <pre className="bg-background rounded px-2 py-1 overflow-x-auto">codex --version</pre>
+                  <pre className="bg-background rounded px-2 py-1 overflow-x-auto">codex login --device-auth</pre>
+                  <pre className="bg-background rounded px-2 py-1 overflow-x-auto">zoobot provider openai --model gpt-5.3-codex</pre>
+                  <pre className="bg-background rounded px-2 py-1 overflow-x-auto">curl http://localhost:3777/api/provider-auth-state</pre>
+                </div>
+              </div>
+
               <div className="rounded border p-3 bg-muted/30 text-sm space-y-2">
                 <p className="font-medium">OpenAI / Codex connect guidance</p>
                 {providerAuthState?.openai.codex.cli_installed ? (
