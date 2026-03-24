@@ -8,6 +8,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import http from 'http';
 import {
     MessageJobData,
     getSettings, getAgents, getTeams, LOG_FILE, FILES_DIR,
@@ -214,7 +215,13 @@ function logAgentConfig(): void {
 
 initQueueDb();
 
-const apiServer = startApiServer();
+let apiServer: http.Server;
+try {
+    apiServer = startApiServer();
+} catch (error) {
+    log('ERROR', `Failed to start API server: ${(error as Error).message}`);
+    process.exit(1);
+}
 
 // Event-driven: process queue when a new message arrives
 queueEvents.on('message:enqueued', () => processQueue());
