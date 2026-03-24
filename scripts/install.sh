@@ -1,90 +1,68 @@
 #!/usr/bin/env bash
-# ZooBot Installer v2 - Fixed symlink approach
-
+# ZooBot Installer - Clean curl+tar, no rsync
 set -e
 
-NC='\033[0m'
-BOLD='\033[1m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-RED='\033[0;31m'
-
-INSTALL_HOME="${HOME:-/root}"
-ZOOBOT_DIR="$INSTALL_HOME/.zoobot"
-
-echo -e "${BOLD}========================================${NC}"
-echo -e "${BOLD}   ZooBot Installer v2${NC}"
-echo -e "${BOLD}========================================${NC}"
-echo ""
-
-# Detect install mode
-if [ -d "/usr/local/bin" ] && [ -w "/usr/local/bin" ]; then
-    BIN_DIR="/usr/local/bin"
-else
-    BIN_DIR="$ZOOBOT_DIR/bin"
-    mkdir -p "$BIN_DIR"
-fi
-
-echo "Installing ZooBot CLI to: $BIN_DIR"
-
-# Download ZooBot repo as tarball
+RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'; NC='\033[0m'
+INSTALL_HOME="${ZOOBOT_HOME:-$HOME/.zoobot}"
 TARBALL_URL="https://github.com/Maliot100X/ZooBot/archive/refs/heads/main.tar.gz"
-TARBALL_TMP="/tmp/zoobot-install.tar.gz"
+TARBALL_TMP="/tmp/zoobot-$$.tar.gz"
 
-echo -e "${YELLOW}Downloading ZooBot...${NC}"
-if curl -fsSL "$TARBALL_URL" -o "$TARBALL_TMP" 2>/dev/null; then
-    echo -e "${GREEN}✓ Downloaded${NC}"
-else
-    echo -e "${RED}✗ Download failed${NC}"
-    exit 1
+echo -e "${BLUE}ZooBot CLI Installer${NC}"
+echo "====================="
+echo -e "Installing to: ${GREEN}$INSTALL_HOME${NC}"
+
+# Check Node.js
+! command -v node &>/dev/null && echo -e "${RED}✗ Node.js not found${NC}" && exit 1
+echo -e "${GREEN}✓ Node.js $(node --version)${NC}"
+
+# Check tmux
+! command -v tmux &>/dev/null && echo -e "${RED}✗ tmux not found${NC}" && exit 1
+echo -e "${GREEN}✓ tmux $(tmux -V)${NC}"
+
+# Download and extract
+echo -e "${YELLOW}→ Downloading ZooBot...${NC}"
+curl -fsSL "$TARBALL_URL" -o "$TARBALL_TMP"
+
+echo -e "${YELLOW}→ Extracting...${NC}"
+mkdir -p "$INSTALL_HOME"
+tar -xzf "$TARBALL_TMP" -C "$INSTALL_HOME" --strip-components=1
+rm -f "$TARBALL_TMP"
+
+# Install dependencies and build
+if [ -f "$INSTALL_HOME/package.json" ]; then
+    echo -e "${YELLOW}→ Installing dependencies...${NC}"
+    cd "$INSTALL_HOME" && npm install 2>/dev/null | tail -3
+    
+    echo -e "${YELLOW}→ Building...${NC}"
+    npm run build 2>/dev/null || npx tsc --build
 fi
 
-# Extract
-echo -e "${YELLOW}Installing ZooBot files...${NC}"
-rm -rf "$ZOOBOT_DIR"
-mkdir -p "$(dirname "$ZOOBOT_DIR")"
-if tar -xzf "$TARBALL_TMP" -C "$(dirname "$ZOOBOT_DIR")" 2>/dev/null; then
-    # Handle both ZooBot-main and zoobot-main (capital/lowercase)
-    EXTRACTED_DIR="$(dirname "$ZOOBOT_DIR")/$(ls "$(dirname "$ZOOBOT_DIR")" | grep -i 'ZooBot' | head -1)"
-    if [ -d "$EXTRACTED_DIR" ]; then
-        mv "$EXTRACTED_DIR" "$ZOOBOT_DIR"
-    else
-        echo -e "${RED}✗ Extracted directory not found${NC}"
-        exit 1
-    fi
-    rm -f "$TARBALL_TMP"
-    echo -e "${GREEN}✓ Installed to $ZOOBOT_DIR${NC}"
-else
-    echo -e "${RED}✗ Extraction failed${NC}"
-    rm -f "$TARBALL_TMP"
-    exit 1
-fi
-
-# Create wrapper script that directly calls the .mjs file
-WRAPPER_PATH="$BIN_DIR/zoobot"
-echo -e "${YELLOW}Creating CLI wrapper...${NC}"
-
-cat > "$WRAPPER_PATH" << 'WRAPPER'
+# Create bin wrapper
+mkdir -p "$INSTALL_HOME/bin"
+cat > "$INSTALL_HOME/bin/zoobot" << 'WRAPPER'
 #!/usr/bin/env bash
-exec node /root/.zoobot/packages/cli/bin/zoobot.mjs "$@"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+exec node "$SCRIPT_DIR/packages/cli/bin/zoobot.mjs" "$@"
 WRAPPER
+chmod +x "$INSTALL_HOME/bin/zoobot"
 
-chmod +x "$WRAPPER_PATH"
+# Link to PATH
+for bin_dir in /usr/local/bin "$HOME/bin"; do
+    if [ -d "$bin_dir" ] && [ -w "$bin_dir" ]; then
+        ln -sf "$INSTALL_HOME/bin/zoobot" "$bin_dir/zoobot" 2>/dev/null && break
+    fi
+done
 
-# If installed to /usr/local/bin, also symlink for PATH
-if [ "$BIN_DIR" = "/usr/local/bin" ]; then
-    ln -sf "$ZOOBOT_DIR/bin/zoobot" "$BIN_DIR/zoobot" 2>/dev/null || true
-fi
+# Create daemon script
+mkdir -p "$INSTALL_HOME/scripts"
+cat > "$INSTALL_HOME/scripts/zoobot-daemon.sh" << 'DAEMON'
+#!/usr/bin/env bash
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export ZOOBOT_HOME="$(dirname "$SCRIPT_DIR")"
+exec node "$ZOOBOT_HOME/packages/cli/bin/zoobot.mjs" start "$@"
+DAEMON
+chmod +x "$INSTALL_HOME/scripts/zoobot-daemon.sh"
 
+echo -e "${GREEN}✓ ZooBot installed to $INSTALL_HOME${NC}"
 echo ""
-echo -e "${GREEN}✓${NC} ZooBot CLI installed successfully!"
-echo ""
-echo -e "${BOLD}Usage:${NC}"
-echo "  zoobot --help       Show all commands"
-echo "  zoobot version      Show version"
-echo "  zoobot install     Install (re-run to update)"
-echo "  zoobot setup       Configure API keys"
-echo "  zoobot start       Start daemon"
-echo "  zoobot office      Open ZooOffice web portal"
-echo ""
-echo -e "${GREEN}Get started:${NC} zoobot --help"
+echo "Run 'zoobot --help' to get started!"
