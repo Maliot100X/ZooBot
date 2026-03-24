@@ -630,7 +630,7 @@ Custom providers are defined in `.zoobot/settings.json`:
 | Field      | Required | Description                                          |
 | ---------- | -------- | ---------------------------------------------------- |
 | `name`     | Yes      | Human-readable display name                          |
-| `harness`  | Yes      | Which CLI to use: `claude` or `codex`                |
+| `harness`  | Yes      | Which CLI/API path to use: `claude`, `codex`, or `groq` |
 | `base_url` | Yes      | API endpoint URL                                     |
 | `api_key`  | Yes      | API key for authentication                           |
 | `model`    | No       | Default model name to pass to the CLI                |
@@ -698,6 +698,37 @@ When an agent with `provider: "custom:<id>"` is invoked:
    - **claude harness**: `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_API_KEY=""`
    - **codex harness**: `OPENAI_API_KEY`, `OPENAI_BASE_URL`
 4. The CLI is invoked with the model name passed through (no alias resolution)
+
+### Provider Auth Readiness API
+
+ZooBot now exposes a provider auth readiness endpoint:
+
+```bash
+curl http://localhost:3777/api/provider-auth-state
+```
+
+This reports machine-side provider readiness, including OpenAI/Codex login availability:
+- whether an OpenAI API key is configured
+- whether a base URL is configured
+- whether the Codex CLI is installed
+- whether `~/.codex/auth.json` exists
+- whether the installed Codex CLI supports device auth
+
+### OpenAI / Codex setup examples
+
+**Device-auth login on the machine:**
+
+```bash
+npm install -g @openai/codex
+codex login --device-auth
+zoobot provider openai --model gpt-5.3-codex
+```
+
+**API key fallback:**
+
+```bash
+zoobot provider openai --model gpt-5.3-codex --auth-token YOUR_REAL_OPENAI_API_KEY
+```
 
 ## Teams
 

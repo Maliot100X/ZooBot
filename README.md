@@ -103,6 +103,35 @@ zoobot model gemma2-9b-it
 
 **Available free models:** llama-3.3-70b-versatile, llama-3.1-70b-versatile, mixtral-8x7b-32768, gemma2-9b-it
 
+### Using OpenAI / Codex
+
+ZooBot can also run with OpenAI Codex. There are two practical connection modes:
+
+1. **Codex / ChatGPT login on the machine** (recommended when you want to use Codex CLI login)
+2. **OpenAI API key fallback** (recommended for explicit API-key-backed setups)
+
+**Machine login with Codex device auth:**
+
+```bash
+npm install -g @openai/codex
+codex login --device-auth
+zoobot provider openai --model gpt-5.3-codex
+```
+
+**API key fallback:**
+
+```bash
+zoobot provider openai --model gpt-5.3-codex --auth-token YOUR_REAL_OPENAI_API_KEY
+```
+
+**Check current provider auth readiness:**
+
+```bash
+curl http://localhost:3777/api/provider-auth-state
+```
+
+This endpoint reports whether OpenAI/Codex appears connectable on the current machine (Codex CLI installed, auth cache present, API key configured, device-auth support, etc.).
+
 <details>
 <summary><b>Development (run from source repo)</b></summary>
 

@@ -346,6 +346,13 @@ switch (command) {
         console.log('  provider list|add|remove         Manage custom providers');
         console.log('  model [name]                     Show or switch AI model');
         console.log('');
+        console.log('OpenAI / Codex quick commands:');
+        console.log('  codex login --device-auth        Sign in with ChatGPT on this machine');
+        console.log('  zoobot provider openai --model gpt-5.3-codex');
+        console.log('                                   Switch ZooBot to OpenAI/Codex');
+        console.log('  curl http://localhost:3777/api/provider-auth-state');
+        console.log('                                   Check provider auth readiness');
+        console.log('');
         console.log('Other:');
         console.log('  reset <id> [...]         Reset specific agent conversation(s)');
         console.log('  pairing                  Manage sender approvals');

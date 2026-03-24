@@ -266,7 +266,10 @@ claude --version
 codex --version
 
 # Authenticate if needed
-codex login
+codex login --device-auth
+
+# Check ZooBot's provider auth readiness view
+curl http://localhost:3777/api/provider-auth-state
 ```
 
 ### Workspace issues
