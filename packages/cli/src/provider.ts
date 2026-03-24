@@ -211,6 +211,24 @@ switch (command) {
     case undefined:
         providerShow();
         break;
+    case 'set-key':
+        if (!args[0]) {
+            p.log.error('Usage: zoobot provider set-key <API_KEY>');
+            p.log.message('Example: zoobot provider set-key gsk_xxx');
+            process.exit(1);
+        }
+        {
+            const settings = requireSettings();
+            if (!settings.models) settings.models = {};
+            settings.models.provider = 'groq';
+            if (!settings.models.groq) settings.models.groq = {};
+            settings.models.groq.auth_token = args[0];
+            settings.models.groq.model = 'llama-3.3-70b-versatile';
+            writeSettings(settings);
+            p.log.success('Groq API key and default model (llama-3.3-70b-versatile) saved!');
+            p.log.message('Run "zoobot start" to apply changes.');
+        }
+        break;
     case 'anthropic':
     case 'openai':
     case 'groq':
@@ -225,7 +243,7 @@ switch (command) {
         break;
     default:
         p.log.error(`Unknown provider command: ${command}`);
-        p.log.message('Usage: provider {show|anthropic|openai|groq} [--model MODEL] [--auth-token TOKEN]');
+        p.log.message('Usage: provider {show|set-key|anthropic|openai|groq} [--model MODEL] [--auth-token TOKEN]');
         p.log.message('       provider model [name]');
         process.exit(1);
 }
