@@ -62,7 +62,7 @@ fi
 # Install dependencies and build
 echo -e "${YELLOW}Installing dependencies...${NC}"
 cd "$ZOOBOT_DIR" || exit 1
-npm install 2>&1 | tail -3
+npm install --no-fund --no-audit 2>&1 | tail -3
 echo -e "${GREEN}✓ Dependencies installed${NC}"
 
 echo -e "${YELLOW}Building ZooBot...${NC}"
@@ -87,8 +87,9 @@ echo ""
 echo -e "${BOLD}Usage:${NC}"
 echo "  zoobot --help       Show all commands"
 echo "  zoobot version      Show version"
-echo "  zoobot setup       Configure API keys"
+echo "  codex login --device-auth   Optional: connect Codex/ChatGPT on this machine"
 echo "  zoobot start       Start daemon"
 echo "  zoobot office      Open ZooOffice web portal"
+echo "  curl http://localhost:3777/api/provider-auth-state"
 echo ""
 echo -e "${GREEN}Get started:${NC} zoobot --help"
