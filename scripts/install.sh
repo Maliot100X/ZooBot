@@ -2,9 +2,8 @@
 # ZooBot CLI Installation Script
 # Installs ZooBot to ~/.zoobot and creates global symlinks.
 #
-# Supports: curl -fsSL <url>/install.sh | bash
-# When piped, downloads the release tarball, extracts it, and installs.
-
+# Supports: curl -fsSL https://raw.githubusercontent.com/Maliot100X/ZooBot/main/scripts/install.sh | bash
+# When piped, clones the repo and installs from source.
 set -e
 
 INSTALL_HOME="$HOME/.zoobot"
@@ -15,12 +14,11 @@ RED='\033[0;31m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-# If piped (no BASH_SOURCE path), download and extract first
+# If piped (no BASH_SOURCE path), clone repo first
 if [ -z "${BASH_SOURCE[0]}" ] || [ "${BASH_SOURCE[0]}" = "bash" ]; then
     INSTALL_TMPDIR="$(mktemp -d)"
-    TARBALL_URL="https://github.com/Maliot100X/ZooBot/releases/latest/download/zoobot-bundle.tar.gz"
-    echo "Downloading ZooBot..."
-    curl -fsSL "$TARBALL_URL" | tar -xz -C "$INSTALL_TMPDIR"
+    echo "Cloning ZooBot..."
+    git clone --depth 1 https://github.com/Maliot100X/ZooBot.git "$INSTALL_TMPDIR/zoobot"
     exec bash "$INSTALL_TMPDIR/zoobot/scripts/install.sh"
 fi
 
