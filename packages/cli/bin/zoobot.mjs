@@ -241,7 +241,7 @@ async function run() {
 
 async function openOffice() {
     console.log('');
-    log(GREEN, `Opening TinyOffice: ${PORTAL_URL}`);
+    log(GREEN, `Opening ZooOffice: ${PORTAL_URL}`);
     try {
         const open = (await import('open')).default;
         await open(PORTAL_URL);
@@ -310,7 +310,7 @@ switch (command) {
         console.log('  attach                   Attach to tmux session');
         console.log('');
         console.log('Config:');
-        console.log('  office                   Start TinyOffice web portal (http://localhost:3000)');
+        console.log('  office                   Start ZooOffice web portal (http://localhost:3000)');
         console.log('');
         console.log('Messaging:');
         console.log('  send <msg>               Send message to AI');

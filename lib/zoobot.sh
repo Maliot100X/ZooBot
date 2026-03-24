@@ -291,17 +291,17 @@ case "${1:-}" in
         # Install deps if node_modules missing or package.json changed since last install
         if [ ! -d "$OFFICE_DIR/node_modules" ] || \
            [ "$OFFICE_DIR/package.json" -nt "$OFFICE_DIR/node_modules/.package-lock.json" ]; then
-            echo -e "${BLUE}Installing TinyOffice dependencies...${NC}"
+            echo -e "${BLUE}Installing ZooOffice dependencies...${NC}"
             (cd "$OFFICE_DIR" && npm install) || { echo -e "${RED}Install failed${NC}"; exit 1; }
         fi
         # Build if .next missing or source/deps changed since last build
         if [ ! -f "$OFFICE_DIR/.next/BUILD_ID" ] || \
            [ "$OFFICE_DIR/package.json" -nt "$OFFICE_DIR/.next/BUILD_ID" ] || \
            [ -n "$(find "$OFFICE_DIR/src" -newer "$OFFICE_DIR/.next/BUILD_ID" -print -quit 2>/dev/null)" ]; then
-            echo -e "${BLUE}Building TinyOffice...${NC}"
+            echo -e "${BLUE}Building ZooOffice...${NC}"
             (cd "$OFFICE_DIR" && npm run build) || { echo -e "${RED}Build failed${NC}"; exit 1; }
         fi
-        echo -e "${GREEN}Starting TinyOffice on http://localhost:3000${NC}"
+        echo -e "${GREEN}Starting ZooOffice on http://localhost:3000${NC}"
         (cd "$OFFICE_DIR" && npm run start)
         ;;
     pairing)
@@ -344,7 +344,7 @@ case "${1:-}" in
         echo "  agent {list|add|remove|show|reset|provider}  Manage agents"
         echo "  team {list|add|remove|show|add-agent|remove-agent|visualize}  Manage teams"
         echo "  chatroom <team_id>       Live chat room viewer for a team"
-        echo "  office                   Start TinyOffice web portal (http://localhost:3000)"
+        echo "  office                   Start ZooOffice web portal (http://localhost:3000)"
         echo "  pairing {pending|approved|list|approve <code>|unpair <channel> <sender_id>}  Manage sender approvals"
         echo "  update                   Update ZooBot to latest version"
         echo "  version                  Show current version"
