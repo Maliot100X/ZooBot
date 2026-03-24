@@ -25,3 +25,8 @@ Thumbs.db
 .idea/
 *.swp
 *~
+
+# ZooOffice standalone build
+zoobot-office-standalone/node_modules/
+zoobot-office-standalone/.next/
+zoobot-office-standalone/package.json
