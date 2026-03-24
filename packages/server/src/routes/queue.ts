@@ -4,7 +4,7 @@ import {
     getQueueStatus, getAgentQueueStatus, getRecentResponses, getResponsesForChannel,
     ackResponse, enqueueResponse,
     getDeadMessages, retryDeadMessage, deleteDeadMessage,
-} from '@tinyagi/core';
+} from '@zoobot/core';
 
 export function createQueueRoutes() {
     const app = new Hono();

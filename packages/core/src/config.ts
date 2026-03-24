@@ -4,12 +4,12 @@ import { jsonrepair } from 'jsonrepair';
 import { Settings, AgentConfig, TeamConfig, MODEL_ALIASES } from './types';
 
 export const SCRIPT_DIR = path.resolve(__dirname, '../../..');
-export const TINYAGI_HOME = process.env.TINYAGI_HOME
-    || path.join(require('os').homedir(), '.tinyagi');
-export const LOG_FILE = path.join(TINYAGI_HOME, 'logs/queue.log');
-export const SETTINGS_FILE = path.join(TINYAGI_HOME, 'settings.json');
-export const CHATS_DIR = path.join(TINYAGI_HOME, 'chats');
-export const FILES_DIR = path.join(TINYAGI_HOME, 'files');
+export const ZOOBOT_HOME = process.env.ZOOBOT_HOME
+    || path.join(require('os').homedir(), '.zoobot');
+export const LOG_FILE = path.join(ZOOBOT_HOME, 'logs/queue.log');
+export const SETTINGS_FILE = path.join(ZOOBOT_HOME, 'settings.json');
+export const CHATS_DIR = path.join(ZOOBOT_HOME, 'chats');
+export const FILES_DIR = path.join(ZOOBOT_HOME, 'files');
 
 export function getSettings(): Settings {
     try {
@@ -45,6 +45,9 @@ export function getSettings(): Settings {
             } else if (settings?.models?.opencode) {
                 if (!settings.models) settings.models = {};
                 settings.models.provider = 'opencode';
+            } else if (settings?.models?.groq) {
+                if (!settings.models) settings.models = {};
+                settings.models.provider = 'groq';
             } else if (settings?.models?.anthropic) {
                 if (!settings.models) settings.models = {};
                 settings.models.provider = 'anthropic';
@@ -73,11 +76,11 @@ export function getDefaultAgentFromModels(settings: Settings): AgentConfig {
     }
 
     // Get workspace path from settings or use default
-    const workspacePath = settings?.workspace?.path || path.join(require('os').homedir(), 'tinyagi-workspace');
-    const defaultAgentDir = path.join(workspacePath, 'tinyagi');
+    const workspacePath = settings?.workspace?.path || path.join(require('os').homedir(), 'zoobot-workspace');
+    const defaultAgentDir = path.join(workspacePath, 'zoobot');
 
     return {
-        name: 'TinyAGI Agent',
+        name: 'ZooBot Agent',
         provider,
         model,
         working_directory: defaultAgentDir,
@@ -85,7 +88,7 @@ export function getDefaultAgentFromModels(settings: Settings): AgentConfig {
 }
 
 /**
- * Get all configured agents. Falls back to a single "tinyagi" agent
+ * Get all configured agents. Falls back to a single "zoobot" agent
  * derived from the legacy models section if no agents are configured.
  */
 export function getAgents(settings: Settings): Record<string, AgentConfig> {
@@ -93,7 +96,7 @@ export function getAgents(settings: Settings): Record<string, AgentConfig> {
         return settings.agents;
     }
     // Fall back to default agent from models section
-    return { tinyagi: getDefaultAgentFromModels(settings) };
+    return { zoobot: getDefaultAgentFromModels(settings) };
 }
 
 /**

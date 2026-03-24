@@ -19,9 +19,9 @@ import { fileURLToPath } from 'url';
 // ─── Paths ──────────────────────────────────────────────────────────────────
 const __filename_ = fileURLToPath(import.meta.url);
 const __dirname_ = path.dirname(__filename_);
-const TINYAGI_HOME = process.env.TINYAGI_HOME
-    || path.join(os.homedir(), '.tinyagi');
-const SETTINGS_FILE = path.join(TINYAGI_HOME, 'settings.json');
+const ZOOBOT_HOME = process.env.ZOOBOT_HOME
+    || path.join(os.homedir(), '.zoobot');
+const SETTINGS_FILE = path.join(ZOOBOT_HOME, 'settings.json');
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -261,7 +261,7 @@ function App({ teamId, apiPort }: { teamId: string; apiPort: number }) {
 
 const args = process.argv.slice(2);
 let teamId: string | null = null;
-let apiPort = parseInt(process.env.TINYAGI_API_PORT || '3777', 10);
+let apiPort = parseInt(process.env.ZOOBOT_API_PORT || '3777', 10);
 
 for (let i = 0; i < args.length; i++) {
     if ((args[i] === '--team' || args[i] === '-t') && args[i + 1]) {

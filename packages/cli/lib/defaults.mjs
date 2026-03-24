@@ -2,23 +2,23 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 
-const TINYAGI_HOME = process.env.TINYAGI_HOME || path.join(os.homedir(), '.tinyagi');
-const SETTINGS_FILE = path.join(TINYAGI_HOME, 'settings.json');
-const OLD_HOME = path.join(os.homedir(), '.tinyclaw');
+const ZOOBOT_HOME = process.env.ZOOBOT_HOME || path.join(os.homedir(), '.zoobot');
+const SETTINGS_FILE = path.join(ZOOBOT_HOME, 'settings.json');
+const OLD_HOME = path.join(os.homedir(), '.zoobot');
 
 /**
- * Auto-migrate from ~/.tinyclaw to ~/.tinyagi if needed.
- * Runs once — skips if ~/.tinyclaw doesn't exist or ~/.tinyagi already exists.
+ * Auto-migrate from ~/.zoobot to ~/.zoobot if needed.
+ * Runs once — skips if ~/.zoobot doesn't exist or ~/.zoobot already exists.
  */
 function migrateFromTinyclaw() {
-    if (!fs.existsSync(OLD_HOME) || fs.existsSync(TINYAGI_HOME)) return false;
+    if (!fs.existsSync(OLD_HOME) || fs.existsSync(ZOOBOT_HOME)) return false;
 
-    console.log('Migrating ~/.tinyclaw → ~/.tinyagi ...');
-    fs.renameSync(OLD_HOME, TINYAGI_HOME);
+    console.log('Migrating ~/.zoobot → ~/.zoobot ...');
+    fs.renameSync(OLD_HOME, ZOOBOT_HOME);
 
     // Rename database file
-    const oldDb = path.join(TINYAGI_HOME, 'tinyclaw.db');
-    const newDb = path.join(TINYAGI_HOME, 'tinyagi.db');
+    const oldDb = path.join(ZOOBOT_HOME, 'zoobot.db');
+    const newDb = path.join(ZOOBOT_HOME, 'zoobot.db');
     if (fs.existsSync(oldDb) && !fs.existsSync(newDb)) {
         fs.renameSync(oldDb, newDb);
         for (const suffix of ['-wal', '-shm']) {
@@ -37,7 +37,7 @@ function expandHome(p) {
 }
 
 /**
- * Determine SCRIPT_DIR (repo root) — same logic as tinyagi.sh.
+ * Determine SCRIPT_DIR (repo root) — same logic as zoobot.sh.
  * When running from packages/cli/lib/defaults.mjs, go up 3 levels.
  */
 const SCRIPT_DIR = path.resolve(new URL('.', import.meta.url).pathname, '../../..');
@@ -76,7 +76,7 @@ function bootstrapAgentDir(agentDir) {
     fs.writeFileSync(path.join(agentDir, 'AGENTS.md'), '');
 
     // Copy SOUL.md
-    const targetTinyagi = path.join(agentDir, '.tinyagi');
+    const targetTinyagi = path.join(agentDir, '.zoobot');
     fs.mkdirSync(targetTinyagi, { recursive: true });
     const sourceSoul = path.join(SCRIPT_DIR, 'SOUL.md');
     if (fs.existsSync(sourceSoul)) {
@@ -89,18 +89,18 @@ function bootstrapAgentDir(agentDir) {
 
 const DEFAULT_SETTINGS = {
     workspace: {
-        path: path.join(os.homedir(), 'tinyagi-workspace'),
-        name: 'tinyagi-workspace',
+        path: path.join(os.homedir(), 'zoobot-workspace'),
+        name: 'zoobot-workspace',
     },
     channels: {
         enabled: [],
     },
     agents: {
-        tinyagi: {
-            name: 'TinyAGI Agent',
+        zoobot: {
+            name: 'ZooBot Agent',
             provider: 'anthropic',
             model: 'opus',
-            working_directory: path.join(os.homedir(), 'tinyagi-workspace', 'tinyagi'),
+            working_directory: path.join(os.homedir(), 'zoobot-workspace', 'zoobot'),
         },
     },
     models: {
@@ -116,15 +116,15 @@ const DEFAULT_SETTINGS = {
  * Returns true if defaults were written, false if settings already exist.
  */
 export function writeDefaults() {
-    // Auto-migrate from tinyclaw if needed
+    // Auto-migrate from zoobot if needed
     migrateFromTinyclaw();
 
     if (fs.existsSync(SETTINGS_FILE)) {
         return false;
     }
 
-    // Ensure TINYAGI_HOME exists
-    fs.mkdirSync(TINYAGI_HOME, { recursive: true });
+    // Ensure ZOOBOT_HOME exists
+    fs.mkdirSync(ZOOBOT_HOME, { recursive: true });
 
     // Write settings
     fs.writeFileSync(SETTINGS_FILE, JSON.stringify(DEFAULT_SETTINGS, null, 2) + '\n');
@@ -140,4 +140,4 @@ export function writeDefaults() {
     return true;
 }
 
-export { TINYAGI_HOME, SETTINGS_FILE, DEFAULT_SETTINGS };
+export { ZOOBOT_HOME, SETTINGS_FILE, DEFAULT_SETTINGS };

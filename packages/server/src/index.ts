@@ -1,7 +1,7 @@
 /**
  * API Server — HTTP endpoints for Mission Control and external integrations.
  *
- * Runs on a configurable port (env TINYAGI_API_PORT, default 3777) and
+ * Runs on a configurable port (env ZOOBOT_API_PORT, default 3777) and
  * provides REST + SSE access to agents, teams, settings, queue status,
  * events, logs, and chat histories.
  */
@@ -11,7 +11,7 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { serve } from '@hono/node-server';
 import { RESPONSE_ALREADY_SENT } from '@hono/node-server/utils/response';
-import { log } from '@tinyagi/core';
+import { log } from '@zoobot/core';
 import { addSSEClient, removeSSEClient } from './sse';
 
 import messagesRoutes from './routes/messages';
@@ -28,7 +28,7 @@ import agentMessagesRoutes from './routes/agent-messages';
 import servicesRoutes from './routes/services';
 import schedulesRoutes from './routes/schedules';
 
-const API_PORT = parseInt(process.env.TINYAGI_API_PORT || '3777', 10);
+const API_PORT = parseInt(process.env.ZOOBOT_API_PORT || '3777', 10);
 
 /**
  * Create and start the API server.

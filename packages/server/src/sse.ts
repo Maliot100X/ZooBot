@@ -1,5 +1,5 @@
 import http from 'http';
-import { onEvent } from '@tinyagi/core';
+import { onEvent } from '@zoobot/core';
 
 const sseClients = new Set<http.ServerResponse>();
 

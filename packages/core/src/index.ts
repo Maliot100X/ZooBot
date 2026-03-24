@@ -1,5 +1,5 @@
 /**
- * @tinyagi/core — Library barrel.
+ * @zoobot/core — Library barrel.
  *
  * Pure re-exports only. No side-effects.
  * The queue processor entry point is in main.ts.

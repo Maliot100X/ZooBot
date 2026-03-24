@@ -1,6 +1,6 @@
 # Queue System
 
-TinyAGI uses a SQLite-backed queue (`tinyagi.db`) to coordinate message processing across multiple channels and agents. Messages are stored in a `messages` table (incoming) and `responses` table (outgoing), with atomic transactions for reliable delivery.
+ZooBot uses a SQLite-backed queue (`zoobot.db`) to coordinate message processing across multiple channels and agents. Messages are stored in a `messages` table (incoming) and `responses` table (outgoing), with atomic transactions for reliable delivery.
 
 ## Overview
 
@@ -12,7 +12,7 @@ TinyAGI uses a SQLite-backed queue (`tinyagi.db`) to coordinate message processi
                      │ enqueueMessage()
                      ↓
 ┌─────────────────────────────────────────────────────────────┐
-│                   ~/.tinyagi/tinyagi.db                     │
+│                   ~/.zoobot/zoobot.db                     │
 │                                                              │
 │  messages table                    responses table           │
 │  status: pending → processing →   status: pending → acked   │
@@ -39,7 +39,7 @@ TinyAGI uses a SQLite-backed queue (`tinyagi.db`) to coordinate message processi
 
 ## Database Schema
 
-The queue lives in `~/.tinyagi/tinyagi.db` (SQLite, WAL mode).
+The queue lives in `~/.zoobot/zoobot.db` (SQLite, WAL mode).
 
 ### Messages Table (incoming queue)
 
@@ -235,7 +235,7 @@ The queue processor emits events via an in-memory listener system. The API serve
 
 ## API Endpoints
 
-The API server runs on port 3777 (configurable via `TINYAGI_API_PORT`):
+The API server runs on port 3777 (configurable via `ZOOBOT_API_PORT`):
 
 | Endpoint | Description |
 |----------|-------------|

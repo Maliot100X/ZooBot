@@ -1,4 +1,4 @@
-import { genId, log } from '@tinyagi/core';
+import { genId, log } from '@zoobot/core';
 
 export type GroupedChatroomResult = {
     messages: any[];

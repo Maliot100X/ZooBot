@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
-import { TeamConfig } from '@tinyagi/core';
-import { getSettings, getTeams } from '@tinyagi/core';
-import { log } from '@tinyagi/core';
+import { TeamConfig } from '@zoobot/core';
+import { getSettings, getTeams } from '@zoobot/core';
+import { log } from '@zoobot/core';
 import { mutateSettings } from './settings';
 
 const app = new Hono();

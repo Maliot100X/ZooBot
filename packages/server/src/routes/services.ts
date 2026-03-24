@@ -2,16 +2,16 @@ import path from 'path';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
 import { Hono } from 'hono';
-import { SCRIPT_DIR, getSettings } from '@tinyagi/core';
-import { log } from '@tinyagi/core';
+import { SCRIPT_DIR, getSettings } from '@zoobot/core';
+import { log } from '@zoobot/core';
 
 const app = new Hono();
 const execFileAsync = promisify(execFile);
 
-const TINYAGI_SH = path.join(SCRIPT_DIR, 'lib', 'tinyagi.sh');
+const ZOOBOT_SH = path.join(SCRIPT_DIR, 'lib', 'zoobot.sh');
 
 async function runTinyagi(...args: string[]): Promise<string> {
-    const { stdout, stderr } = await execFileAsync('bash', [TINYAGI_SH, ...args], {
+    const { stdout, stderr } = await execFileAsync('bash', [ZOOBOT_SH, ...args], {
         cwd: SCRIPT_DIR,
         timeout: 30_000,
         maxBuffer: 1024 * 1024,

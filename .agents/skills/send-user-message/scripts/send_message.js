@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * send_message.js — Write a message to the TinyAGI outgoing queue
+ * send_message.js — Write a message to the ZooBot outgoing queue
  * so a channel client (Discord/Telegram/WhatsApp) delivers it to a paired user.
  *
  * Usage:
@@ -12,19 +12,19 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
-const API_PORT = parseInt(process.env.TINYAGI_API_PORT || '3777', 10);
+const API_PORT = parseInt(process.env.ZOOBOT_API_PORT || '3777', 10);
 const API_BASE = `http://localhost:${API_PORT}`;
 
 // ---------------------------------------------------------------------------
-// Resolve TINYAGI_HOME (same logic as src/lib/config.ts)
+// Resolve ZOOBOT_HOME (same logic as src/lib/config.ts)
 // ---------------------------------------------------------------------------
 const SCRIPT_DIR = path.resolve(__dirname, '../../../..');
-const localTinyagi = path.join(SCRIPT_DIR, '.tinyagi');
-const TINYAGI_HOME = fs.existsSync(path.join(localTinyagi, 'settings.json'))
+const localTinyagi = path.join(SCRIPT_DIR, '.zoobot');
+const ZOOBOT_HOME = fs.existsSync(path.join(localTinyagi, 'settings.json'))
     ? localTinyagi
-    : path.join(os.homedir(), '.tinyagi');
+    : path.join(os.homedir(), '.zoobot');
 
-const PAIRING_FILE = path.join(TINYAGI_HOME, 'pairing.json');
+const PAIRING_FILE = path.join(ZOOBOT_HOME, 'pairing.json');
 
 // ---------------------------------------------------------------------------
 // Helpers

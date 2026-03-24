@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# TinyAGI CLI Installation Script
-# Installs TinyAGI to ~/.tinyagi and creates global symlinks.
+# ZooBot CLI Installation Script
+# Installs ZooBot to ~/.zoobot and creates global symlinks.
 #
 # Supports: curl -fsSL <url>/install.sh | bash
 # When piped, downloads the release tarball, extracts it, and installs.
 
 set -e
 
-INSTALL_HOME="$HOME/.tinyagi"
+INSTALL_HOME="$HOME/.zoobot"
 
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -18,43 +18,43 @@ NC='\033[0m'
 # If piped (no BASH_SOURCE path), download and extract first
 if [ -z "${BASH_SOURCE[0]}" ] || [ "${BASH_SOURCE[0]}" = "bash" ]; then
     INSTALL_TMPDIR="$(mktemp -d)"
-    TARBALL_URL="https://github.com/TinyAGI/tinyagi/releases/latest/download/tinyagi-bundle.tar.gz"
-    echo "Downloading TinyAGI..."
+    TARBALL_URL="https://github.com/ZooBot/zoobot/releases/latest/download/zoobot-bundle.tar.gz"
+    echo "Downloading ZooBot..."
     curl -fsSL "$TARBALL_URL" | tar -xz -C "$INSTALL_TMPDIR"
-    exec bash "$INSTALL_TMPDIR/tinyagi/scripts/install.sh"
+    exec bash "$INSTALL_TMPDIR/zoobot/scripts/install.sh"
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-echo -e "${BLUE}TinyAGI CLI Installer${NC}"
+echo -e "${BLUE}ZooBot CLI Installer${NC}"
 echo "====================="
 echo ""
 
-# Migrate from ~/.tinyclaw if needed
-if [ -d "$HOME/.tinyclaw" ] && [ ! -d "$INSTALL_HOME" ]; then
-    echo -e "Migrating ${YELLOW}~/.tinyclaw${NC} → ${GREEN}~/.tinyagi${NC}"
-    mv "$HOME/.tinyclaw" "$INSTALL_HOME"
+# Migrate from ~/.zoobot if needed
+if [ -d "$HOME/.zoobot" ] && [ ! -d "$INSTALL_HOME" ]; then
+    echo -e "Migrating ${YELLOW}~/.zoobot${NC} → ${GREEN}~/.zoobot${NC}"
+    mv "$HOME/.zoobot" "$INSTALL_HOME"
     # Rename database files
-    [ -f "$INSTALL_HOME/tinyclaw.db" ] && mv "$INSTALL_HOME/tinyclaw.db" "$INSTALL_HOME/tinyagi.db"
-    [ -f "$INSTALL_HOME/tinyclaw.db-wal" ] && mv "$INSTALL_HOME/tinyclaw.db-wal" "$INSTALL_HOME/tinyagi.db-wal"
-    [ -f "$INSTALL_HOME/tinyclaw.db-shm" ] && mv "$INSTALL_HOME/tinyclaw.db-shm" "$INSTALL_HOME/tinyagi.db-shm"
-    echo -e "  ${GREEN}✓${NC} Migrated from ~/.tinyclaw"
+    [ -f "$INSTALL_HOME/zoobot.db" ] && mv "$INSTALL_HOME/zoobot.db" "$INSTALL_HOME/zoobot.db"
+    [ -f "$INSTALL_HOME/zoobot.db-wal" ] && mv "$INSTALL_HOME/zoobot.db-wal" "$INSTALL_HOME/zoobot.db-wal"
+    [ -f "$INSTALL_HOME/zoobot.db-shm" ] && mv "$INSTALL_HOME/zoobot.db-shm" "$INSTALL_HOME/zoobot.db-shm"
+    echo -e "  ${GREEN}✓${NC} Migrated from ~/.zoobot"
 fi
 
-# Copy project files to ~/.tinyagi (permanent location)
+# Copy project files to ~/.zoobot (permanent location)
 if [ "$PROJECT_ROOT" != "$INSTALL_HOME" ]; then
-    echo -e "Installing to: ${GREEN}~/.tinyagi${NC}"
+    echo -e "Installing to: ${GREEN}~/.zoobot${NC}"
     mkdir -p "$INSTALL_HOME"
     # Copy everything from the extracted/source bundle
     cp -a "$PROJECT_ROOT/." "$INSTALL_HOME/"
     PROJECT_ROOT="$INSTALL_HOME"
-    echo -e "  ${GREEN}✓${NC} Files installed to ~/.tinyagi"
+    echo -e "  ${GREEN}✓${NC} Files installed to ~/.zoobot"
 else
-    echo -e "Updating in: ${GREEN}~/.tinyagi${NC}"
+    echo -e "Updating in: ${GREEN}~/.zoobot${NC}"
 fi
 
-WRAPPER="$PROJECT_ROOT/bin/tinyagi"
+WRAPPER="$PROJECT_ROOT/bin/zoobot"
 
 # Check if wrapper exists
 if [ ! -f "$WRAPPER" ]; then
@@ -63,8 +63,8 @@ if [ ! -f "$WRAPPER" ]; then
 fi
 
 chmod +x "$WRAPPER"
-chmod +x "$PROJECT_ROOT/bin/tinyclaw" 2>/dev/null || true
-chmod +x "$PROJECT_ROOT/lib/tinyagi.sh" 2>/dev/null || true
+chmod +x "$PROJECT_ROOT/bin/zoobot" 2>/dev/null || true
+chmod +x "$PROJECT_ROOT/lib/zoobot.sh" 2>/dev/null || true
 
 # Rebuild native modules for this platform (bundle was built on Linux)
 if command -v npm &> /dev/null; then
@@ -107,22 +107,22 @@ install_symlink() {
 
 echo ""
 echo "Creating symlinks..."
-install_symlink "tinyagi" "$WRAPPER"
-install_symlink "tinyclaw" "$WRAPPER"  # backward compat
+install_symlink "zoobot" "$WRAPPER"
+install_symlink "zoobot" "$WRAPPER"  # backward compat
 
 echo ""
-echo -e "${GREEN}✓ TinyAGI CLI installed successfully!${NC}"
+echo -e "${GREEN}✓ ZooBot CLI installed successfully!${NC}"
 echo ""
-echo "You can now run 'tinyagi' from any directory:"
+echo "You can now run 'zoobot' from any directory:"
 echo ""
-echo -e "  ${GREEN}tinyagi start${NC}     - Start TinyAGI"
-echo -e "  ${GREEN}tinyagi status${NC}    - Check status"
-echo -e "  ${GREEN}tinyagi --help${NC}    - Show all commands"
+echo -e "  ${GREEN}zoobot start${NC}     - Start ZooBot"
+echo -e "  ${GREEN}zoobot status${NC}    - Check status"
+echo -e "  ${GREEN}zoobot --help${NC}    - Show all commands"
 echo ""
 
 # Verify it works — if not in PATH, add it to the shell profile
-if command -v tinyagi &> /dev/null; then
-    echo -e "${GREEN}✓ 'tinyagi' command is available${NC}"
+if command -v zoobot &> /dev/null; then
+    echo -e "${GREEN}✓ 'zoobot' command is available${NC}"
 elif [ "$INSTALL_DIR" = "$HOME/.local/bin" ]; then
     SHELL_NAME="$(basename "$SHELL")"
     SHELL_PROFILE=""
@@ -142,7 +142,7 @@ elif [ "$INSTALL_DIR" = "$HOME/.local/bin" ]; then
 
     if [ -n "$SHELL_PROFILE" ] && ! grep -qF '.local/bin' "$SHELL_PROFILE" 2>/dev/null; then
         echo "" >> "$SHELL_PROFILE"
-        echo "# Added by TinyAGI installer" >> "$SHELL_PROFILE"
+        echo "# Added by ZooBot installer" >> "$SHELL_PROFILE"
         echo "$PATH_LINE" >> "$SHELL_PROFILE"
         echo -e "${GREEN}✓ Added ~/.local/bin to PATH in ${SHELL_PROFILE/#$HOME/\~}${NC}"
     fi
@@ -150,10 +150,10 @@ elif [ "$INSTALL_DIR" = "$HOME/.local/bin" ]; then
     export PATH="$HOME/.local/bin:$PATH"
     echo -e "${YELLOW}⚠ Restart your terminal or run:  source ${SHELL_PROFILE/#$HOME/\~}${NC}"
 else
-    echo -e "${YELLOW}⚠ 'tinyagi' command not found in PATH${NC}"
+    echo -e "${YELLOW}⚠ 'zoobot' command not found in PATH${NC}"
     echo "  Add $INSTALL_DIR to your PATH."
 fi
 
 echo ""
-echo "To uninstall: rm -rf ~/.tinyagi && rm $INSTALL_DIR/tinyagi $INSTALL_DIR/tinyclaw"
+echo "To uninstall: rm -rf ~/.zoobot && rm $INSTALL_DIR/zoobot $INSTALL_DIR/zoobot"
 echo ""

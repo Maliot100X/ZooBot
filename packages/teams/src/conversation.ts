@@ -3,7 +3,7 @@ import {
     log, emitEvent,
     findTeamForAgent, insertChatMessage,
     enqueueMessage, streamResponse, genId,
-} from '@tinyagi/core';
+} from '@zoobot/core';
 import { convertTagsToReadable, extractTeammateMentions, extractChatRoomMessages } from './routing';
 
 // ── Team Chat Room ───────────────────────────────────────────────────────────

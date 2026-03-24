@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# tasks.sh — Manage TinyAGI kanban tasks via the REST API.
+# tasks.sh — Manage ZooBot kanban tasks via the REST API.
 #
 # Usage:
 #   tasks.sh list   [--mine] [--status STATUS]
@@ -8,9 +8,9 @@
 
 set -euo pipefail
 
-API_PORT="${TINYAGI_API_PORT:-3777}"
+API_PORT="${ZOOBOT_API_PORT:-3777}"
 API_BASE="http://localhost:${API_PORT}"
-AGENT_ID="${TINYAGI_AGENT_ID:-}"
+AGENT_ID="${ZOOBOT_AGENT_ID:-}"
 
 # ────────────────────────────────────────────
 # Helpers
@@ -18,7 +18,7 @@ AGENT_ID="${TINYAGI_AGENT_ID:-}"
 
 usage() {
     cat <<'USAGE'
-tasks.sh — manage TinyAGI kanban tasks
+tasks.sh — manage ZooBot kanban tasks
 
 Commands:
   list     List tasks (optionally filtered)
@@ -70,7 +70,7 @@ cmd_list() {
     local jq_filter="."
 
     if $filter_mine; then
-        [[ -z "$AGENT_ID" ]] && die "--mine requires TINYAGI_AGENT_ID to be set"
+        [[ -z "$AGENT_ID" ]] && die "--mine requires ZOOBOT_AGENT_ID to be set"
         jq_filter="${jq_filter} | map(select(.assignee == \"${AGENT_ID}\"))"
     fi
 

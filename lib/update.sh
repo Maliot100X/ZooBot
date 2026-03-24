@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Update management for TinyAGI
+# Update management for ZooBot
 # Interactive do_update() moved to src/cli/update.ts
 
 # GitHub repository info
-GITHUB_REPO="TinyAGI/tinyagi"
-UPDATE_CHECK_CACHE="$HOME/.tinyagi/.update_check"
+GITHUB_REPO="ZooBot/zoobot"
+UPDATE_CHECK_CACHE="$HOME/.zoobot/.update_check"
 UPDATE_CHECK_TTL=3600  # Check once per hour
 
 # Get current version
@@ -57,7 +57,7 @@ check_for_updates() {
     local force="${1:-false}"
 
     # Skip if disabled
-    if [ "${TINYAGI_SKIP_UPDATE_CHECK:-}" = "1" ]; then
+    if [ "${ZOOBOT_SKIP_UPDATE_CHECK:-}" = "1" ]; then
         return 1
     fi
 
@@ -112,7 +112,7 @@ show_update_notification() {
     echo -e "  Current: ${RED}v${current_version}${NC}"
     echo -e "  Latest:  ${GREEN}v${latest_version}${NC}"
     echo ""
-    echo -e "  Update:  ${GREEN}tinyagi update${NC}"
+    echo -e "  Update:  ${GREEN}zoobot update${NC}"
     echo -e "  Changes: ${BLUE}https://github.com/$GITHUB_REPO/releases/v${latest_version}${NC}"
     echo ""
     echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"

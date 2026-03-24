@@ -2,11 +2,11 @@ import fs from 'fs';
 import path from 'path';
 import { Cron } from 'croner';
 import { Schedule, MessageJobData } from './types';
-import { TINYAGI_HOME } from './config';
+import { ZOOBOT_HOME } from './config';
 import { log } from './logging';
 import { enqueueMessage } from './queues';
 
-export const SCHEDULES_FILE = path.join(TINYAGI_HOME, 'schedules.json');
+export const SCHEDULES_FILE = path.join(ZOOBOT_HOME, 'schedules.json');
 
 // Live cron job instances keyed by schedule id
 const jobs = new Map<string, Cron>();
@@ -37,7 +37,7 @@ function fireSchedule(schedule: Schedule): void {
     const data: MessageJobData = {
         channel: schedule.channel,
         sender: schedule.sender,
-        senderId: `tinyagi-schedule:${schedule.label}`,
+        senderId: `zoobot-schedule:${schedule.label}`,
         message: `@${schedule.agentId} ${schedule.message}`,
         messageId: msgId,
         agent: schedule.agentId,

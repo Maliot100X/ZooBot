@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import { Hono } from 'hono';
-import { TINYAGI_HOME } from '@tinyagi/core';
-import { log } from '@tinyagi/core';
+import { ZOOBOT_HOME } from '@zoobot/core';
+import { log } from '@zoobot/core';
 
 type ProjectStatus = 'active' | 'archived';
 
@@ -15,7 +15,7 @@ interface Project {
     updatedAt: number;
 }
 
-const PROJECTS_FILE = path.join(TINYAGI_HOME, 'projects.json');
+const PROJECTS_FILE = path.join(ZOOBOT_HOME, 'projects.json');
 
 function readProjects(): Project[] {
     try {

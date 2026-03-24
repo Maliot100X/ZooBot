@@ -3,11 +3,11 @@ import * as p from '@clack/prompts';
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
-import { SCRIPT_DIR } from '@tinyagi/core';
+import { SCRIPT_DIR } from '@zoobot/core';
 import { unwrap, printBanner } from './shared.ts';
 
-const GITHUB_REPO = 'TinyAGI/tinyagi';
-const UPDATE_CHECK_CACHE = path.join(process.env.HOME || '~', '.tinyagi', '.update_check');
+const GITHUB_REPO = 'ZooBot/zoobot';
+const UPDATE_CHECK_CACHE = path.join(process.env.HOME || '~', '.zoobot', '.update_check');
 
 function getCurrentVersion(): string {
     try {
@@ -45,7 +45,7 @@ function versionLt(v1: string, v2: string): boolean {
 
 function sessionExists(): boolean {
     try {
-        execSync('tmux has-session -t tinyagi 2>/dev/null', { stdio: 'ignore' });
+        execSync('tmux has-session -t zoobot 2>/dev/null', { stdio: 'ignore' });
         return true;
     } catch {
         return false;
@@ -54,11 +54,11 @@ function sessionExists(): boolean {
 
 async function doUpdate() {
     printBanner();
-    p.intro('TinyAGI Update');
+    p.intro('ZooBot Update');
 
     // Check if running
     if (sessionExists()) {
-        p.log.warn('TinyAGI is currently running.');
+        p.log.warn('ZooBot is currently running.');
         const stopFirst = unwrap(await p.confirm({
             message: 'Stop and update?',
             initialValue: false,
@@ -67,7 +67,7 @@ async function doUpdate() {
             p.log.message('Update cancelled.');
             return;
         }
-        execSync(`"${path.join(SCRIPT_DIR, 'lib', 'tinyagi.sh')}" stop`, { stdio: 'inherit' });
+        execSync(`"${path.join(SCRIPT_DIR, 'lib', 'zoobot.sh')}" stop`, { stdio: 'inherit' });
     }
 
     const currentVersion = getCurrentVersion();
@@ -106,9 +106,9 @@ async function doUpdate() {
     // Download
     spinner.start('[1/4] Downloading...');
     const tempDir = execSync('mktemp -d', { encoding: 'utf8' }).trim();
-    const bundleUrl = `https://github.com/${GITHUB_REPO}/releases/download/v${latestVersion}/tinyagi-bundle.tar.gz`;
+    const bundleUrl = `https://github.com/${GITHUB_REPO}/releases/download/v${latestVersion}/zoobot-bundle.tar.gz`;
     try {
-        execSync(`curl -fSL -o "${tempDir}/tinyagi-bundle.tar.gz" "${bundleUrl}"`, { stdio: 'ignore' });
+        execSync(`curl -fSL -o "${tempDir}/zoobot-bundle.tar.gz" "${bundleUrl}"`, { stdio: 'ignore' });
     } catch {
         spinner.stop('Download failed.');
         p.log.error('Download failed.');
@@ -120,7 +120,7 @@ async function doUpdate() {
     // Backup
     spinner.start('[2/4] Backing up...');
     const backupDir = path.join(
-        process.env.HOME || '~', '.tinyagi', 'backups',
+        process.env.HOME || '~', '.zoobot', 'backups',
         `v${currentVersion}-${new Date().toISOString().replace(/[:.]/g, '').slice(0, 15)}`,
     );
     fs.mkdirSync(backupDir, { recursive: true });
@@ -134,9 +134,9 @@ async function doUpdate() {
 
     // Install
     spinner.start('[3/4] Installing...');
-    execSync(`cd "${tempDir}" && tar -xzf tinyagi-bundle.tar.gz && cp -a tinyagi/. "${SCRIPT_DIR}/"`, { stdio: 'ignore' });
-    execSync(`find "${SCRIPT_DIR}/bin" "${SCRIPT_DIR}/lib" "${SCRIPT_DIR}/scripts" -type f \\( -name "*.sh" -o -name "tinyagi" \\) -exec chmod +x {} +`, { stdio: 'ignore' });
-    execSync(`chmod +x "${SCRIPT_DIR}/lib/tinyagi.sh"`, { stdio: 'ignore' });
+    execSync(`cd "${tempDir}" && tar -xzf zoobot-bundle.tar.gz && cp -a zoobot/. "${SCRIPT_DIR}/"`, { stdio: 'ignore' });
+    execSync(`find "${SCRIPT_DIR}/bin" "${SCRIPT_DIR}/lib" "${SCRIPT_DIR}/scripts" -type f \\( -name "*.sh" -o -name "zoobot" \\) -exec chmod +x {} +`, { stdio: 'ignore' });
+    execSync(`chmod +x "${SCRIPT_DIR}/lib/zoobot.sh"`, { stdio: 'ignore' });
     fs.rmSync(tempDir, { recursive: true, force: true });
 
     // Rebuild native modules
@@ -148,7 +148,7 @@ async function doUpdate() {
 
     p.log.success(`[4/4] Updated to v${latestVersion}!`);
     p.log.info(`Backup location: ${backupDir}`);
-    p.outro('Run `tinyagi start` to begin.');
+    p.outro('Run `zoobot start` to begin.');
 }
 
 doUpdate().catch(err => {

@@ -3,10 +3,10 @@ import * as p from '@clack/prompts';
 import fs from 'fs';
 import path from 'path';
 import http from 'http';
-import { SCRIPT_DIR } from '@tinyagi/core';
+import { SCRIPT_DIR } from '@zoobot/core';
 import { unwrap, required, readSettings, writeSettings, printBanner } from './shared.ts';
 
-const API_PORT = process.env.TINYAGI_API_PORT || '3777';
+const API_PORT = process.env.ZOOBOT_API_PORT || '3777';
 const API_URL = `http://localhost:${API_PORT}`;
 
 function sendMessage(message: string, source = 'cli') {
@@ -58,22 +58,22 @@ function channelsReset(channel: string) {
 
     if (channel === 'whatsapp') {
         const paths = [
-            path.join(SCRIPT_DIR, '.tinyagi', 'whatsapp-session'),
-            path.join(SCRIPT_DIR, '.tinyagi', 'channels', 'whatsapp_ready'),
-            path.join(SCRIPT_DIR, '.tinyagi', 'channels', 'whatsapp_qr.txt'),
+            path.join(SCRIPT_DIR, '.zoobot', 'whatsapp-session'),
+            path.join(SCRIPT_DIR, '.zoobot', 'channels', 'whatsapp_ready'),
+            path.join(SCRIPT_DIR, '.zoobot', 'channels', 'whatsapp_qr.txt'),
             path.join(SCRIPT_DIR, '.wwebjs_cache'),
         ];
         for (const p of paths) {
             fs.rmSync(p, { recursive: true, force: true });
         }
         p.log.success('WhatsApp session cleared');
-        p.log.message('Restart TinyAGI to re-authenticate: tinyagi restart');
+        p.log.message('Restart ZooBot to re-authenticate: zoobot restart');
         return;
     }
 
     // Token-based channels
-    p.log.message(`To reset ${channel}, run: tinyagi channel setup`);
-    p.log.message(`Or manually edit .tinyagi/settings.json to change the ${channel} token.`);
+    p.log.message(`To reset ${channel}, run: zoobot channel setup`);
+    p.log.message(`Or manually edit .zoobot/settings.json to change the ${channel} token.`);
 }
 
 const ALL_CHANNELS = ['telegram', 'discord', 'whatsapp'] as const;
@@ -96,7 +96,7 @@ const CHANNEL_TOKEN_HELP: Record<string, string> = {
 
 async function channelSetup() {
     printBanner();
-    p.intro('TinyAGI - Channel Setup');
+    p.intro('ZooBot - Channel Setup');
 
     const settings = readSettings();
 
@@ -141,7 +141,7 @@ async function channelSetup() {
     p.log.success('Channel configuration saved');
 
     if (enabledChannels.length > 0) {
-        p.outro('Run `tinyagi restart` to apply changes.');
+        p.outro('Run `zoobot restart` to apply changes.');
     } else {
         p.outro('No channels enabled. You can add them later.');
     }

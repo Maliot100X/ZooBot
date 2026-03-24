@@ -45,7 +45,7 @@ Even when messaging an agent directly (e.g., `@coder fix this`), team context is
 
 ## Configuration
 
-Teams are stored in `~/.tinyagi/settings.json`:
+Teams are stored in `~/.zoobot/settings.json`:
 
 ```json
 {
@@ -143,7 +143,7 @@ The chat room is opt-in — agents decide when shared visibility is useful. The 
 **CLI** — real-time TUI with type-to-send:
 
 ```bash
-tinyagi chatroom dev     # Watch and post to #dev chat room
+zoobot chatroom dev     # Watch and post to #dev chat room
 ```
 
 The viewer polls for new messages every second and displays them in a scrolling log. Type a message and press Enter to post it to the chat room (delivered to all agents as `[Chat room #team — @user]`). Press `q` (when input is empty) or Esc to quit.
@@ -157,14 +157,14 @@ POST /api/chatroom/:teamId          — Post a message (body: { "message": "..."
 
 ## Chat History
 
-Team conversations are saved to `~/.tinyagi/chats/{team_id}/` as timestamped Markdown files.
+Team conversations are saved to `~/.zoobot/chats/{team_id}/` as timestamped Markdown files.
 
 Each file contains:
 - Team name and metadata (date, channel, sender, message count)
 - The original user message
 - Each agent's response with agent name
 
-Example file (`~/.tinyagi/chats/dev/2026-02-13_14-30-00.md`):
+Example file (`~/.zoobot/chats/dev/2026-02-13_14-30-00.md`):
 
 ```markdown
 # Team Conversation: Development Team (@dev)
@@ -196,8 +196,8 @@ Changes look good, approved!
 Monitor team chains in real-time with the TUI dashboard:
 
 ```bash
-tinyagi team visualize         # Watch all teams
-tinyagi team visualize dev     # Watch specific team
+zoobot team visualize         # Watch all teams
+zoobot team visualize dev     # Watch specific team
 ```
 
 The visualizer displays:
@@ -212,13 +212,13 @@ Press `q` to quit.
 ## CLI Commands
 
 ```bash
-tinyagi team list              # List all teams
-tinyagi team add               # Add a new team (interactive wizard)
-tinyagi team show dev          # Show team configuration
-tinyagi team remove dev        # Remove a team
-tinyagi team add-agent dev reviewer     # Add @reviewer to @dev
-tinyagi team remove-agent dev reviewer  # Remove @reviewer from @dev
-tinyagi team visualize [id]    # Live TUI dashboard
+zoobot team list              # List all teams
+zoobot team add               # Add a new team (interactive wizard)
+zoobot team show dev          # Show team configuration
+zoobot team remove dev        # Remove a team
+zoobot team add-agent dev reviewer     # Add @reviewer to @dev
+zoobot team remove-agent dev reviewer  # Remove @reviewer from @dev
+zoobot team visualize [id]    # Live TUI dashboard
 ```
 
 ### In-Chat Commands
@@ -244,17 +244,17 @@ Team conversations emit events via SSE (`GET /api/events/stream`) for the visual
 
 ```bash
 # 1. Create agents
-tinyagi agent add    # Create "coder" agent
-tinyagi agent add    # Create "reviewer" agent
+zoobot agent add    # Create "coder" agent
+zoobot agent add    # Create "reviewer" agent
 
 # 2. Create team
-tinyagi team add     # Interactive: name "dev", agents [coder, reviewer], leader: coder
+zoobot team add     # Interactive: name "dev", agents [coder, reviewer], leader: coder
 
 # 3. Send a message
-tinyagi send "@dev fix the auth bug"
+zoobot send "@dev fix the auth bug"
 
 # 4. Watch it work
-tinyagi team visualize dev
+zoobot team visualize dev
 ```
 
 ## See Also

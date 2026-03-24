@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { Hono } from 'hono';
-import { CHATS_DIR } from '@tinyagi/core';
+import { CHATS_DIR } from '@zoobot/core';
 
 const app = new Hono();
 

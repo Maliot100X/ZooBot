@@ -3,9 +3,9 @@ import path from 'path';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
 import { Hono } from 'hono';
-import { AgentConfig, CustomProvider } from '@tinyagi/core';
-import { getSettings, getAgents, ensureAgentDirectory } from '@tinyagi/core';
-import { log } from '@tinyagi/core';
+import { AgentConfig, CustomProvider } from '@zoobot/core';
+import { getSettings, getAgents, ensureAgentDirectory } from '@zoobot/core';
+import { log } from '@zoobot/core';
 import { mutateSettings } from './settings';
 
 const app = new Hono();
@@ -50,7 +50,7 @@ app.put('/api/agents/:id', async (c) => {
     const isNew = !currentSettings.agents?.[agentId];
 
     const workspacePath = currentSettings.workspace?.path
-        || path.join(require('os').homedir(), 'tinyagi-workspace');
+        || path.join(require('os').homedir(), 'zoobot-workspace');
     const workingDir = body.working_directory || path.join(workspacePath, agentId);
 
     const settings = mutateSettings(s => {
@@ -242,7 +242,7 @@ app.get('/api/agents/:id/memory', (c) => {
     const agent = settings.agents?.[agentId];
     if (!agent) return c.json({ error: `agent '${agentId}' not found` }, 404);
 
-    const { loadMemoryIndex } = require('@tinyagi/core');
+    const { loadMemoryIndex } = require('@zoobot/core');
     const index = loadMemoryIndex(agent.working_directory);
     const memoryDir = path.join(agent.working_directory, 'memory');
     const files: { name: string; path: string }[] = [];

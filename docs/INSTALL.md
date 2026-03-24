@@ -1,23 +1,23 @@
-# TinyAGI Installation Guide
+# ZooBot Installation Guide
 
 ## Quick Install (Recommended)
 
-The fastest way to install TinyAGI:
+The fastest way to install ZooBot:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/TinyAGI/tinyagi/main/scripts/remote-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/ZooBot/zoobot/main/scripts/remote-install.sh | bash
 ```
 
 This one-line command:
 - ✅ Checks all dependencies (node, npm, tmux, claude)
 - ✅ Downloads pre-built bundle (no npm install needed!)
-- ✅ Installs to `~/.tinyagi`
-- ✅ Creates global `tinyagi` command
+- ✅ Installs to `~/.zoobot`
+- ✅ Creates global `zoobot` command
 - ✅ Falls back to source install if no bundle available
 
 **After installation:**
 ```bash
-tinyagi start
+zoobot start
 ```
 
 ## Prerequisites
@@ -39,18 +39,18 @@ Before installing, ensure you have:
 Best for most users. Downloads and installs everything automatically:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/TinyAGI/tinyagi/main/scripts/remote-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/ZooBot/zoobot/main/scripts/remote-install.sh | bash
 ```
 
 **What it does:**
 1. Checks dependencies
 2. Downloads latest bundle from GitHub Releases
 3. Extracts to install directory
-4. Creates `tinyagi` command in PATH
+4. Creates `zoobot` command in PATH
 5. Ready to use!
 
 **Install location:**
-- `~/.tinyagi` (user directory)
+- `~/.zoobot` (user directory)
 
 ### Option 2: Manual Bundle Install
 
@@ -58,17 +58,17 @@ Download the pre-built bundle manually:
 
 ```bash
 # Download latest release
-wget https://github.com/TinyAGI/tinyagi/releases/latest/download/tinyagi-bundle.tar.gz
+wget https://github.com/ZooBot/zoobot/releases/latest/download/zoobot-bundle.tar.gz
 
 # Extract
-tar -xzf tinyagi-bundle.tar.gz
-cd tinyagi
+tar -xzf zoobot-bundle.tar.gz
+cd zoobot
 
 # Install CLI
 ./scripts/install.sh
 
 # Start
-tinyagi start
+zoobot start
 ```
 
 ### Option 3: From Source
@@ -77,8 +77,8 @@ Clone the repository and build locally:
 
 ```bash
 # Clone
-git clone https://github.com/TinyAGI/tinyagi.git
-cd tinyagi
+git clone https://github.com/ZooBot/zoobot.git
+cd zoobot
 
 # Install dependencies (may take a few minutes)
 npm install
@@ -87,7 +87,7 @@ npm install
 ./scripts/install.sh
 
 # Start
-tinyagi start
+zoobot start
 ```
 
 ### Option 4: Direct Script (No Global CLI)
@@ -95,36 +95,36 @@ tinyagi start
 Run without installing the global command:
 
 ```bash
-git clone https://github.com/TinyAGI/tinyagi.git
-cd tinyagi
+git clone https://github.com/ZooBot/zoobot.git
+cd zoobot
 
 npm install
 
 # Run directly
-tinyagi start
+zoobot start
 ```
 
 ## Verify Installation
 
-Check if TinyAGI is installed correctly:
+Check if ZooBot is installed correctly:
 
 ```bash
 # Check command availability
-which tinyagi
+which zoobot
 
 # Check version
-tinyagi status
+zoobot status
 
 # View help
-tinyagi
+zoobot
 ```
 
 ## First Run
 
-On first start, TinyAGI will run a setup wizard:
+On first start, ZooBot will run a setup wizard:
 
 ```bash
-tinyagi start
+zoobot start
 ```
 
 You'll configure:
@@ -137,16 +137,16 @@ Follow the prompts and you're ready!
 
 ## Uninstall
 
-To remove TinyAGI:
+To remove ZooBot:
 
 ```bash
 # Remove CLI command only
-cd /path/to/tinyagi
+cd /path/to/zoobot
 ./scripts/uninstall.sh
 
 # Or remove everything (CLI + installation)
-rm -rf ~/.tinyagi
-sudo rm /usr/local/bin/tinyagi  # or ~/.local/bin/tinyagi
+rm -rf ~/.zoobot
+sudo rm /usr/local/bin/zoobot  # or ~/.local/bin/zoobot
 ```
 
 ## Troubleshooting
@@ -157,8 +157,8 @@ The CLI symlink was created but not in your PATH:
 
 ```bash
 # Check where it was installed
-ls -la /usr/local/bin/tinyagi  # system-wide
-ls -la ~/.local/bin/tinyagi     # user
+ls -la /usr/local/bin/zoobot  # system-wide
+ls -la ~/.local/bin/zoobot     # user
 
 # Add to PATH (if using ~/.local/bin)
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
@@ -171,7 +171,7 @@ If `/usr/local/bin` is not writable:
 
 ```bash
 # Option 1: Use sudo for system install
-curl -fsSL https://raw.githubusercontent.com/TinyAGI/tinyagi/main/scripts/remote-install.sh | sudo bash
+curl -fsSL https://raw.githubusercontent.com/ZooBot/zoobot/main/scripts/remote-install.sh | sudo bash
 
 # Option 2: Let it install to ~/.local/bin instead
 # (installer will do this automatically)
@@ -205,17 +205,17 @@ If the pre-built bundle is unavailable:
 After installation:
 
 ```bash
-# Start TinyAGI
-tinyagi start
+# Start ZooBot
+zoobot start
 
 # Check status
-tinyagi status
+zoobot status
 
 # View logs
-tinyagi logs
+zoobot logs
 
 # Get help
-tinyagi
+zoobot
 ```
 
 For more information, see the [main README](README.md).

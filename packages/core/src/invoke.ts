@@ -151,7 +151,7 @@ export async function invokeAgent(
     let provider = rawProvider;
     let customProvider: CustomProvider | undefined;
     let envOverrides: Record<string, string> = {
-        TINYAGI_AGENT_ID: agentId,
+        ZOOBOT_AGENT_ID: agentId,
     };
 
     if (rawProvider.startsWith('custom:')) {
@@ -162,16 +162,22 @@ export async function invokeAgent(
             throw new Error(`Custom provider '${customId}' not found in settings.custom_providers`);
         }
         // Map harness back to built-in provider for adapter selection
-        provider = customProvider.harness === 'codex' ? 'openai' : 'anthropic';
+        if (customProvider.harness === 'groq') {
+            provider = 'groq';
+        } else {
+            provider = customProvider.harness === 'codex' ? 'openai' : 'anthropic';
+        }
 
         // Build env overrides based on harness
         if (customProvider.harness === 'claude') {
-            envOverrides.ANTHROPIC_BASE_URL = customProvider.base_url;
+            envOverrides.ANTHROPIC_BASE_URL = customProvider.base_url || '';
             envOverrides.ANTHROPIC_AUTH_TOKEN = customProvider.api_key;
             envOverrides.ANTHROPIC_API_KEY = '';
         } else if (customProvider.harness === 'codex') {
             envOverrides.OPENAI_API_KEY = customProvider.api_key;
-            envOverrides.OPENAI_BASE_URL = customProvider.base_url;
+            envOverrides.OPENAI_BASE_URL = customProvider.base_url || '';
+        } else if (customProvider.harness === 'groq') {
+            envOverrides.GROQ_API_KEY = customProvider.api_key;
         }
 
         log('INFO', `Using custom provider '${customId}' (harness: ${customProvider.harness}, base_url: ${customProvider.base_url})`);
@@ -189,7 +195,7 @@ export async function invokeAgent(
     const effectiveModel = agent.model || customProvider?.model || '';
     const model = customProvider
         ? effectiveModel
-        : resolveModel(effectiveModel, provider as 'anthropic' | 'openai' | 'opencode');
+        : resolveModel(effectiveModel, provider as 'anthropic' | 'openai' | 'opencode' | 'groq');
 
     // Look up the adapter
     const adapter = getAdapter(provider);

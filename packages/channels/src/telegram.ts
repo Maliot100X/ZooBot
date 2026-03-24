@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Telegram Client for TinyAGI Simple
+ * Telegram Client for ZooBot Simple
  * Writes DM messages to queue and reads responses
  * Does NOT call Claude directly - that's handled by queue-processor
  *
@@ -14,20 +14,20 @@ import fs from 'fs';
 import path from 'path';
 import https from 'https';
 import http from 'http';
-import { ensureSenderPaired, genId } from '@tinyagi/core';
+import { ensureSenderPaired, genId } from '@zoobot/core';
 import { createSSEClient } from './sse-client';
 import { applyDefaultAgent } from './default-agent';
 
-const API_PORT = parseInt(process.env.TINYAGI_API_PORT || '3777', 10);
+const API_PORT = parseInt(process.env.ZOOBOT_API_PORT || '3777', 10);
 const API_BASE = `http://localhost:${API_PORT}`;
 
 const SCRIPT_DIR = path.resolve(__dirname, '..', '..');
-const TINYAGI_HOME = process.env.TINYAGI_HOME
-    || path.join(require('os').homedir(), '.tinyagi');
-const LOG_FILE = path.join(TINYAGI_HOME, 'logs/telegram.log');
-const SETTINGS_FILE = path.join(TINYAGI_HOME, 'settings.json');
-const FILES_DIR = path.join(TINYAGI_HOME, 'files');
-const PAIRING_FILE = path.join(TINYAGI_HOME, 'pairing.json');
+const ZOOBOT_HOME = process.env.ZOOBOT_HOME
+    || path.join(require('os').homedir(), '.zoobot');
+const LOG_FILE = path.join(ZOOBOT_HOME, 'logs/telegram.log');
+const SETTINGS_FILE = path.join(ZOOBOT_HOME, 'settings.json');
+const FILES_DIR = path.join(ZOOBOT_HOME, 'files');
+const PAIRING_FILE = path.join(ZOOBOT_HOME, 'pairing.json');
 
 // Ensure directories exist
 [path.dirname(LOG_FILE), FILES_DIR].forEach(dir => {
@@ -93,7 +93,7 @@ function getTeamListText(): string {
         const settings = JSON.parse(settingsData);
         const teams = settings.teams;
         if (!teams || Object.keys(teams).length === 0) {
-            return 'No teams configured.\n\nCreate a team with: tinyagi team add';
+            return 'No teams configured.\n\nCreate a team with: zoobot team add';
         }
         let text = 'Available Teams:\n';
         for (const [id, team] of Object.entries(teams) as [string, any][]) {
@@ -115,7 +115,7 @@ function getAgentListText(): string {
         const settings = JSON.parse(settingsData);
         const agents = settings.agents;
         if (!agents || Object.keys(agents).length === 0) {
-            return 'No agents configured. Using default single-agent mode.\n\nConfigure agents in .tinyagi/settings.json or run: tinyagi agent add';
+            return 'No agents configured. Using default single-agent mode.\n\nConfigure agents in .zoobot/settings.json or run: zoobot agent add';
         }
         let text = 'Available Agents:\n';
         for (const [id, agent] of Object.entries(agents) as [string, any][]) {
@@ -252,8 +252,8 @@ function pairingMessage(code: string): string {
     return [
         'This sender is not paired yet.',
         `Your pairing code: ${code}`,
-        'Ask the TinyAGI owner to approve you with:',
-        `tinyagi pairing approve ${code}`,
+        'Ask the ZooBot owner to approve you with:',
+        `zoobot pairing approve ${code}`,
     ].join('\n');
 }
 
@@ -265,7 +265,7 @@ bot.api.setMyCommands([
     { command: 'agent', description: 'List available agents' },
     { command: 'team', description: 'List available teams' },
     { command: 'reset', description: 'Reset conversation history' },
-    { command: 'restart', description: 'Restart TinyAGI' },
+    { command: 'restart', description: 'Restart ZooBot' },
 ]).catch((err: Error) => log('WARN', `Failed to register commands: ${err.message}`));
 
 // Message received - Write to queue
@@ -394,7 +394,7 @@ bot.on('message', async (ctx) => {
                 const settingsData = fs.readFileSync(SETTINGS_FILE, 'utf8');
                 const settings = JSON.parse(settingsData);
                 const agents = settings.agents || {};
-                const workspacePath = settings?.workspace?.path || path.join(require('os').homedir(), 'tinyagi-workspace');
+                const workspacePath = settings?.workspace?.path || path.join(require('os').homedir(), 'zoobot-workspace');
                 const resetResults: string[] = [];
                 for (const agentId of agentArgs) {
                     if (!agents[agentId]) {
@@ -420,11 +420,11 @@ bot.on('message', async (ctx) => {
         // Check for restart command
         if (messageText.trim().match(/^[!/]restart$/i)) {
             log('INFO', 'Restart command received');
-            await bot.api.sendMessage(msg.chat.id, 'Restarting TinyAGI...', {
+            await bot.api.sendMessage(msg.chat.id, 'Restarting ZooBot...', {
                 reply_parameters: { message_id: msg.message_id },
             });
             const { exec } = require('child_process');
-            exec(`"${path.join(SCRIPT_DIR, 'lib', 'tinyagi.sh')}" restart`, { detached: true, stdio: 'ignore' });
+            exec(`"${path.join(SCRIPT_DIR, 'lib', 'zoobot.sh')}" restart`, { detached: true, stdio: 'ignore' });
             return;
         }
 

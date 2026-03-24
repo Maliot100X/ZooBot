@@ -1,5 +1,5 @@
 {
-  "name": "@tinyagi/channels",
+  "name": "@zoobot/channels",
   "version": "0.0.10",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -14,7 +14,7 @@
     "whatsapp": "node dist/whatsapp.js"
   },
   "dependencies": {
-    "@tinyagi/core": "*",
+    "@zoobot/core": "*",
     "discord.js": "^14.16.0",
     "grammy": "^1.35.0",
     "qrcode-terminal": "^0.12.0",

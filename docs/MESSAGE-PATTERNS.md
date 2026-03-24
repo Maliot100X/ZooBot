@@ -1,6 +1,6 @@
 # Message Patterns
 
-Team communication in TinyAGI uses flat message passing: agents communicate by enqueuing messages for each other through a shared SQLite queue. There is no central orchestrator and no conversation state — each message is independent.
+Team communication in ZooBot uses flat message passing: agents communicate by enqueuing messages for each other through a shared SQLite queue. There is no central orchestrator and no conversation state — each message is independent.
 
 ## How it works
 

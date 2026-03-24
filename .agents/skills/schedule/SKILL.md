@@ -5,9 +5,9 @@ description: "Create, list, and delete scheduled tasks (recurring or one-time) t
 
 # Schedule Skill
 
-Manage scheduled tasks that deliver messages to agents via the tinyagi API. Schedules can be **recurring** (cron-based) or **one-time** (fire once at a specific date/time). Each schedule enqueues a routed message (`@agent_id <task>`) that the queue processor picks up and invokes.
+Manage scheduled tasks that deliver messages to agents via the zoobot API. Schedules can be **recurring** (cron-based) or **one-time** (fire once at a specific date/time). Each schedule enqueues a routed message (`@agent_id <task>`) that the queue processor picks up and invokes.
 
-Schedules are persisted to `~/.tinyagi/schedules.json` and run in-process via the `croner` library — no system crontab required.
+Schedules are persisted to `~/.zoobot/schedules.json` and run in-process via the `croner` library — no system crontab required.
 
 ## API Endpoints
 
@@ -64,7 +64,7 @@ One-time schedules automatically disable themselves after firing.
 scripts/schedule.sh list [--agent AGENT_ID]
 ```
 
-Lists all tinyagi schedules. Optionally filter by `--agent` to show only schedules targeting a specific agent.
+Lists all zoobot schedules. Optionally filter by `--agent` to show only schedules targeting a specific agent.
 
 ### Delete a schedule
 
@@ -73,7 +73,7 @@ scripts/schedule.sh delete --label LABEL
 scripts/schedule.sh delete --all
 ```
 
-Delete a specific schedule by label, or delete all tinyagi schedules.
+Delete a specific schedule by label, or delete all zoobot schedules.
 
 ## Workflow
 
@@ -155,7 +155,7 @@ scripts/schedule.sh delete --all
 
 ## How it works
 
-- Schedules are persisted in `~/.tinyagi/schedules.json`.
+- Schedules are persisted in `~/.zoobot/schedules.json`.
 - The server runs an in-process cron scheduler (using `croner`) — no system crontab needed.
 - When a schedule fires, it directly enqueues a message in the SQLite queue.
 - The queue processor picks up the message and invokes the target agent, exactly like a message from any channel.

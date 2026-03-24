@@ -6,10 +6,10 @@
 import Database from 'better-sqlite3';
 import path from 'path';
 import { EventEmitter } from 'events';
-import { TINYAGI_HOME } from './config';
+import { ZOOBOT_HOME } from './config';
 import { MessageJobData, ResponseJobData } from './types';
 
-const QUEUE_DB_PATH = path.join(TINYAGI_HOME, 'tinyagi.db');
+const QUEUE_DB_PATH = path.join(ZOOBOT_HOME, 'zoobot.db');
 const MAX_RETRIES = 5;
 
 let db: Database.Database | null = null;

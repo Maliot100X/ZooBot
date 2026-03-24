@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# schedule.sh — Create, list, and delete scheduled tasks via the tinyagi API.
+# schedule.sh — Create, list, and delete scheduled tasks via the zoobot API.
 #
 # Usage:
 #   schedule.sh create  --cron "EXPR" --agent AGENT_ID --message "MSG" [--channel CH] [--sender S] [--label LABEL]
@@ -11,7 +11,7 @@
 
 set -euo pipefail
 
-API_PORT="${TINYAGI_API_PORT:-3777}"
+API_PORT="${ZOOBOT_API_PORT:-3777}"
 API_BASE="http://localhost:${API_PORT}"
 
 # ────────────────────────────────────────────
@@ -20,7 +20,7 @@ API_BASE="http://localhost:${API_PORT}"
 
 usage() {
     cat <<'USAGE'
-schedule.sh — manage tinyagi scheduled tasks via the API
+schedule.sh — manage zoobot scheduled tasks via the API
 
 Commands:
   create   Create a new schedule
@@ -40,7 +40,7 @@ List flags:
 
 Delete flags:
   --label LABEL       Delete the schedule with this label
-  --all               Delete ALL tinyagi schedules
+  --all               Delete ALL zoobot schedules
 
 Examples:
   schedule.sh create --cron "0 9 * * *" --agent coder --message "Run daily tests"
@@ -163,7 +163,7 @@ cmd_list() {
         if [[ -n "$filter_agent" ]]; then
             echo "No schedules found for agent @${filter_agent}."
         else
-            echo "No tinyagi schedules found."
+            echo "No zoobot schedules found."
         fi
         return
     fi
@@ -208,7 +208,7 @@ cmd_delete() {
         response=$(curl -s "${API_BASE}/api/schedules")
 
         if [[ "$response" == "[]" ]]; then
-            echo "No tinyagi schedules to delete."
+            echo "No zoobot schedules to delete."
             return
         fi
 
@@ -217,7 +217,7 @@ cmd_delete() {
         ids=$(echo "$response" | grep -o '"id":"[^"]*"' | sed 's/"id":"//;s/"$//')
 
         if [[ -z "$ids" ]]; then
-            echo "No tinyagi schedules to delete."
+            echo "No zoobot schedules to delete."
             return
         fi
 
@@ -227,7 +227,7 @@ cmd_delete() {
             count=$((count + 1))
         done <<< "$ids"
 
-        echo "Deleted $count tinyagi schedule(s)."
+        echo "Deleted $count zoobot schedule(s)."
         return
     fi
 

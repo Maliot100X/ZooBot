@@ -41,7 +41,7 @@ export function parseAgentRouting(
             }
         }
     }
-    return { agentId: 'tinyagi', message: rawMessage };
+    return { agentId: 'zoobot', message: rawMessage };
 }
 
 /**

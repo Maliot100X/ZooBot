@@ -2,7 +2,7 @@
 import * as p from '@clack/prompts';
 import fs from 'fs';
 import path from 'path';
-import { CustomProvider, ensureAgentDirectory } from '@tinyagi/core';
+import { CustomProvider, ensureAgentDirectory } from '@zoobot/core';
 import {
     unwrap, cleanId, validateId, required,
     writeSettings, requireSettings, SCRIPT_DIR,
@@ -79,7 +79,7 @@ async function agentAdd() {
         placeholder: 'optional',
     })) || '';
 
-    const workspacePath = settings.workspace?.path || path.join(process.env.HOME || '~', 'tinyagi-workspace');
+    const workspacePath = settings.workspace?.path || path.join(process.env.HOME || '~', 'zoobot-workspace');
     const agentWorkdir = path.join(workspacePath, agentId);
 
     if (!settings.agents) settings.agents = {};
@@ -219,7 +219,7 @@ async function customProviderAdd() {
     writeSettings(settings);
 
     p.log.success(`Custom provider '${providerId}' created!`);
-    p.outro(`Assign to an agent: tinyagi agent provider <agent_id> custom:${providerId}`);
+    p.outro(`Assign to an agent: zoobot agent provider <agent_id> custom:${providerId}`);
 }
 
 // --- custom provider remove ---
@@ -269,7 +269,7 @@ function agentList() {
     if (ids.length === 0) {
         p.log.warn('No agents configured.');
         p.log.message('Using default single-agent mode (from models section).');
-        p.log.message('Add an agent with: tinyagi agent add');
+        p.log.message('Add an agent with: zoobot agent add');
         return;
     }
 
@@ -342,7 +342,7 @@ function agentProvider(agentId: string, providerArg?: string, flag?: string, mod
                 agent.provider = providerArg;
                 if (model) agent.model = model;
             } else {
-                p.log.error('Usage: tinyagi agent provider <agent_id> {anthropic|openai|opencode|custom:<id>} [--model MODEL]');
+                p.log.error('Usage: zoobot agent provider <agent_id> {anthropic|openai|opencode|custom:<id>} [--model MODEL]');
                 process.exit(1);
             }
     }
@@ -393,7 +393,7 @@ function customProviderList() {
 
     if (ids.length === 0) {
         p.log.warn('No custom providers configured.');
-        p.log.message('Add one with: tinyagi provider add');
+        p.log.message('Add one with: zoobot provider add');
         return;
     }
 
@@ -407,7 +407,7 @@ function customProviderList() {
         p.log.message('');
     }
     p.log.message('Usage: Set an agent to use a custom provider with:');
-    p.log.message('  tinyagi agent provider <agent_id> custom:<provider_id>');
+    p.log.message('  zoobot agent provider <agent_id> custom:<provider_id>');
 }
 
 // --- CLI dispatch ---

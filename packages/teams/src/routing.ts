@@ -1,4 +1,4 @@
-import { AgentConfig, TeamConfig, log } from '@tinyagi/core';
+import { AgentConfig, TeamConfig, log } from '@zoobot/core';
 
 // ── Bracket-depth tag parser ────────────────────────────────────────────────
 

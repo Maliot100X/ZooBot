@@ -1,4 +1,4 @@
-# TinyAGI — Multi-team Personal Assistants
+# ZooBot — Multi-team Personal Assistants
 
 Running in persistent mode with teams of agents, messaging integration (Telegram, WhatsApp, Discord), and heartbeat monitoring.
 
@@ -104,7 +104,7 @@ No memories yet. Use the **memory** skill to start building your memory.
 
 ## Soul
 
-You have a soul file at `.tinyagi/SOUL.md` defining your identity, personality, worldview, and opinions. It starts as a template — fill it in over time.
+You have a soul file at `.zoobot/SOUL.md` defining your identity, personality, worldview, and opinions. It starts as a template — fill it in over time.
 
 - **Be specific**: "I prefer pragmatic solutions over elegant abstractions" is useful. "I'm helpful" is not.
 - **Own your perspective**: Form opinions based on the domains you work in.
@@ -112,17 +112,17 @@ You have a soul file at `.tinyagi/SOUL.md` defining your identity, personality, 
 
 ## File Exchange
 
-`~/.tinyagi/files` is the shared file directory with the human.
+`~/.zoobot/files` is the shared file directory with the human.
 
 - **Incoming**: Files arrive as `[file: /path/to/file]` in messages. Supports photos, documents, audio, voice, video, and stickers across Telegram, WhatsApp, and Discord.
-- **Outgoing**: Place files in `.tinyagi/files/` and include `[send_file: /absolute/path/to/file]` in your response. The tag is stripped before delivery and the file is sent as an attachment.
+- **Outgoing**: Place files in `.zoobot/files/` and include `[send_file: /absolute/path/to/file]` in your response. The tag is stripped before delivery and the file is sent as an attachment.
 
 ### Outgoing file format
 
 Include all of the following in the same reply:
 
-1. Place the file under `.tinyagi/files/`
-2. Reference it: `[send_file: /Users/jliao/.tinyagi/files/report.pdf]`
+1. Place the file under `.zoobot/files/`
+2. Reference it: `[send_file: /Users/jliao/.zoobot/files/report.pdf]`
 3. Keep the tag in plain text (system strips it before user delivery)
 
 Multiple files: include one `[send_file: ...]` tag per file.

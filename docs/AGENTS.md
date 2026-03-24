@@ -1,6 +1,6 @@
 # Agents
 
-TinyAGI supports running multiple AI agents simultaneously, each with its own isolated workspace, configuration, and conversation state. This allows you to have specialized agents for different tasks while maintaining complete isolation.
+ZooBot supports running multiple AI agents simultaneously, each with its own isolated workspace, configuration, and conversation state. This allows you to have specialized agents for different tasks while maintaining complete isolation.
 
 ## Overview
 
@@ -52,7 +52,7 @@ The agent management feature enables you to:
 │  │ AGENTS.md    │  │ AGENTS.md    │  │ AGENTS.md    │     │
 │  └──────────────┘  └──────────────┘  └──────────────┘     │
 │                                                              │
-│  Shared: ~/.tinyagi/ (channels, files, logs, tinyagi.db) │
+│  Shared: ~/.zoobot/ (channels, files, logs, zoobot.db) │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -77,40 +77,40 @@ const routing = parseAgentRouting(rawMessage, agents);
 
 ### 2. Agent Configuration
 
-Each agent has its own configuration in `.tinyagi/settings.json`:
+Each agent has its own configuration in `.zoobot/settings.json`:
 
 ```json
 {
   "workspace": {
-    "path": "/Users/me/tinyagi-workspace",
-    "name": "tinyagi-workspace"
+    "path": "/Users/me/zoobot-workspace",
+    "name": "zoobot-workspace"
   },
   "agents": {
     "coder": {
       "name": "Code Assistant",
       "provider": "anthropic",
       "model": "sonnet",
-      "working_directory": "/Users/me/tinyagi-workspace/coder",
+      "working_directory": "/Users/me/zoobot-workspace/coder",
       "system_prompt": "You are a senior software engineer..."
     },
     "writer": {
       "name": "Technical Writer",
       "provider": "openai",
       "model": "gpt-5.3-codex",
-      "working_directory": "/Users/me/tinyagi-workspace/writer",
+      "working_directory": "/Users/me/zoobot-workspace/writer",
       "prompt_file": "/path/to/writer-prompt.md"
     },
     "assistant": {
       "name": "Assistant",
       "provider": "anthropic",
       "model": "opus",
-      "working_directory": "/Users/me/tinyagi-workspace/assistant"
+      "working_directory": "/Users/me/zoobot-workspace/assistant"
     }
   }
 }
 ```
 
-**Note:** The `working_directory` is automatically set to `<workspace>/<agent_id>/` when creating agents via `tinyagi agent add`.
+**Note:** The `working_directory` is automatically set to `<workspace>/<agent_id>/` when creating agents via `zoobot agent add`.
 
 ### 3. Agent Isolation
 
@@ -119,7 +119,7 @@ Each agent has its own isolated workspace directory with complete copies of conf
 **Agent Workspaces:**
 
 ```text
-~/tinyagi-workspace/          # Or custom workspace name
+~/zoobot-workspace/          # Or custom workspace name
 ├── coder/
 │   ├── .claude/               # Agent's own Claude config
 │   │   ├── settings.json
@@ -144,17 +144,17 @@ Each agent has its own isolated workspace directory with complete copies of conf
 
 **Templates & Shared Resources:**
 
-Templates and shared resources are stored in `~/.tinyagi/`:
+Templates and shared resources are stored in `~/.zoobot/`:
 
 ```text
-~/.tinyagi/
+~/.zoobot/
 ├── .claude/           # Template: Copied to each new agent
 ├── heartbeat.md       # Template: Copied to each new agent
 ├── AGENTS.md          # Template: Copied to each new agent
 ├── channels/          # SHARED: Channel state (QR codes, ready flags)
 ├── files/             # SHARED: Uploaded files from all channels
 ├── logs/              # SHARED: Log files for all agents and channels
-└── tinyagi.db        # SHARED: SQLite message queue
+└── zoobot.db        # SHARED: SQLite message queue
 ```
 
 **How it works:**
@@ -165,7 +165,7 @@ Templates and shared resources are stored in `~/.tinyagi/`:
 - Conversation history is isolated per agent (managed by Claude/Codex CLI)
 - Reset flags allow resetting individual agent conversations
 - File operations happen in the agent's directory
-- Templates stored in `~/.tinyagi/` are copied when creating new agents
+- Templates stored in `~/.zoobot/` are copied when creating new agents
 - Uploaded files, the SQLite queue, and logs are shared (common dependencies)
 
 ### 4. Provider Execution
@@ -175,7 +175,7 @@ The queue processor calls the appropriate CLI based on provider:
 **Anthropic (Claude):**
 
 ```bash
-cd "$agent_working_directory"  # e.g., ~/tinyagi-workspace/coder/
+cd "$agent_working_directory"  # e.g., ~/zoobot-workspace/coder/
 claude --dangerously-skip-permissions \
   --model claude-sonnet-4-6 \
   --system-prompt "Your custom prompt..." \
@@ -186,7 +186,7 @@ claude --dangerously-skip-permissions \
 **OpenAI (Codex):**
 
 ```bash
-cd "$agent_working_directory"  # e.g., ~/tinyagi-workspace/coder/
+cd "$agent_working_directory"  # e.g., ~/zoobot-workspace/coder/
 codex exec resume --last \
   --model gpt-5.3-codex \
   --skip-git-repo-check \
@@ -199,11 +199,11 @@ codex exec resume --last \
 
 ### Initial Setup
 
-During first-time setup (`tinyagi setup`), you'll be prompted for:
+During first-time setup (`zoobot setup`), you'll be prompted for:
 
 1. **Workspace name** - Where to store agent directories
-   - Default: `tinyagi-workspace`
-   - Creates: `~/tinyagi-workspace/`
+   - Default: `zoobot-workspace`
+   - Creates: `~/zoobot-workspace/`
 
 2. **Default agent name** - Name for your main assistant
    - Default: `assistant`
@@ -214,7 +214,7 @@ During first-time setup (`tinyagi setup`), you'll be prompted for:
 **Interactive CLI:**
 
 ```bash
-tinyagi agent add
+zoobot agent add
 ```
 
 This walks you through:
@@ -229,20 +229,20 @@ This walks you through:
 
 **Manual Configuration:**
 
-Edit `.tinyagi/settings.json`:
+Edit `.zoobot/settings.json`:
 
 ```json
 {
   "workspace": {
-    "path": "/Users/me/tinyagi-workspace",
-    "name": "tinyagi-workspace"
+    "path": "/Users/me/zoobot-workspace",
+    "name": "zoobot-workspace"
   },
   "agents": {
     "researcher": {
       "name": "Research Assistant",
       "provider": "anthropic",
       "model": "opus",
-      "working_directory": "/Users/me/tinyagi-workspace/researcher",
+      "working_directory": "/Users/me/zoobot-workspace/researcher",
       "system_prompt": "You are a research assistant specialized in academic literature review and data analysis."
     }
   }
@@ -264,7 +264,7 @@ Edit `.tinyagi/settings.json`:
 
 - If both `prompt_file` and `system_prompt` are provided, `prompt_file` takes precedence
 - The `working_directory` is automatically set to `<workspace>/<agent_id>/` when creating agents
-- Each agent gets its own isolated directory with copies of templates from `~/.tinyagi/`
+- Each agent gets its own isolated directory with copies of templates from `~/.zoobot/`
 
 ## Usage
 
@@ -293,7 +293,7 @@ help me with this (goes to default agent - "assistant" by default)
 **From CLI:**
 
 ```bash
-tinyagi agent list
+zoobot agent list
 ```
 
 **Output:**
@@ -304,16 +304,16 @@ Configured Agents
 
   @coder - Code Assistant
     Provider:  anthropic/sonnet
-    Directory: /Users/me/tinyagi-workspace/coder
+    Directory: /Users/me/zoobot-workspace/coder
 
   @writer - Technical Writer
     Provider:  openai/gpt-5.3-codex
-    Directory: /Users/me/tinyagi-workspace/writer
+    Directory: /Users/me/zoobot-workspace/writer
     Prompt:    /path/to/writer-prompt.md
 
   @assistant - Assistant
     Provider:  anthropic/opus
-    Directory: /Users/me/tinyagi-workspace/assistant
+    Directory: /Users/me/zoobot-workspace/assistant
 ```
 
 ### Managing Agents
@@ -321,13 +321,13 @@ Configured Agents
 **Show agent details:**
 
 ```bash
-tinyagi agent show coder
+zoobot agent show coder
 ```
 
 **Reset agent conversation:**
 
 ```bash
-tinyagi agent reset coder
+zoobot agent reset coder
 ```
 
 From chat:
@@ -339,7 +339,7 @@ From chat:
 **Remove agent:**
 
 ```bash
-tinyagi agent remove coder
+zoobot agent remove coder
 ```
 
 ## Use Cases
@@ -452,7 +452,7 @@ const queueData: QueueData = {
 
 ### Fallback Behavior
 
-If no agents are configured, TinyAGI automatically creates a default agent using the legacy `models` section:
+If no agents are configured, ZooBot automatically creates a default agent using the legacy `models` section:
 
 ```json
 {
@@ -469,20 +469,20 @@ This ensures backward compatibility with older configurations.
 
 ### Global Model & Provider Commands
 
-The `tinyagi model` and `tinyagi provider --model` commands update both the global default **and** propagate to all matching agents:
+The `zoobot model` and `zoobot provider --model` commands update both the global default **and** propagate to all matching agents:
 
-- `tinyagi model sonnet` — updates `.models.anthropic.model` and sets `model = "sonnet"` on every agent with `provider == "anthropic"`.
-- `tinyagi model gpt-5.3-codex` — updates `.models.openai.model` and sets `model = "gpt-5.3-codex"` on every agent with `provider == "openai"`.
-- `tinyagi provider openai --model gpt-5.3-codex` — switches the global provider, and updates all agents that were on the **old** provider to the new provider and model.
-- `tinyagi provider anthropic` (no `--model`) — only switches the global default; agents are **not** changed.
+- `zoobot model sonnet` — updates `.models.anthropic.model` and sets `model = "sonnet"` on every agent with `provider == "anthropic"`.
+- `zoobot model gpt-5.3-codex` — updates `.models.openai.model` and sets `model = "gpt-5.3-codex"` on every agent with `provider == "openai"`.
+- `zoobot provider openai --model gpt-5.3-codex` — switches the global provider, and updates all agents that were on the **old** provider to the new provider and model.
+- `zoobot provider anthropic` (no `--model`) — only switches the global default; agents are **not** changed.
 
 To change a **single** agent's provider/model without affecting others, use:
 
 ```bash
-tinyagi agent provider <agent_id> <provider> --model <model>
+zoobot agent provider <agent_id> <provider> --model <model>
 ```
 
-Running `tinyagi model` or `tinyagi provider` with no arguments shows the global default followed by a per-agent breakdown.
+Running `zoobot model` or `zoobot provider` with no arguments shows the global default followed by a per-agent breakdown.
 
 ### Reset Flags
 
@@ -493,8 +493,8 @@ Reset flags are automatically cleaned up after use.
 Reset one or more agents:
 
 ```bash
-tinyagi reset coder
-tinyagi reset coder researcher
+zoobot reset coder
+zoobot reset coder researcher
 ```
 
 ### Custom Workspaces
@@ -515,8 +515,8 @@ Or even use cloud-synced directories:
 ```json
 {
   "workspace": {
-    "path": "/Users/me/Dropbox/tinyagi-workspace",
-    "name": "tinyagi-workspace"
+    "path": "/Users/me/Dropbox/zoobot-workspace",
+    "name": "zoobot-workspace"
   }
 }
 ```
@@ -527,7 +527,7 @@ Files uploaded through messaging channels are automatically available to all age
 
 ```text
 User uploads image.png via Telegram
-→ Saved to ~/.tinyagi/files/telegram_123456_image.png
+→ Saved to ~/.zoobot/files/telegram_123456_image.png
 → Message includes: [file: /path/to/image.png]
 → Routed to agent
 → Agent can read/process the file
@@ -547,12 +547,12 @@ For detailed troubleshooting of agent-related issues, see [TROUBLESHOOTING.md](T
 
 **Quick reference:**
 
-- **Agent not found** → Check: `tinyagi agent list`
+- **Agent not found** → Check: `zoobot agent list`
 - **Wrong agent responding** → Verify routing: `@agent_id message` (with space)
-- **Conversation not resetting** → Send message after: `tinyagi agent reset <id>`
+- **Conversation not resetting** → Send message after: `zoobot agent reset <id>`
 - **CLI not found** → Install Claude Code or Codex CLI
-- **Workspace issues** → Check: `cat .tinyagi/settings.json | jq '.workspace'`
-- **Templates not copying** → Run: `tinyagi setup`
+- **Workspace issues** → Check: `cat .zoobot/settings.json | jq '.workspace'`
+- **Templates not copying** → Run: `zoobot setup`
 
 ## Implementation Details
 
@@ -586,7 +586,7 @@ interface ResponseData {
 **Templates:**
 
 ```text
-~/.tinyagi/
+~/.zoobot/
 ├── .claude/           # Copied to new agents
 ├── heartbeat.md       # Copied to new agents
 └── AGENTS.md          # Copied to new agents
@@ -611,7 +611,7 @@ Custom providers let you use any OpenAI or Anthropic-compatible API endpoint (e.
 
 ### Configuration
 
-Custom providers are defined in `.tinyagi/settings.json`:
+Custom providers are defined in `.zoobot/settings.json`:
 
 ```json
 {
@@ -640,9 +640,9 @@ Custom providers are defined in `.tinyagi/settings.json`:
 **CLI:**
 
 ```bash
-tinyagi provider list                 # List custom providers
-tinyagi provider add                  # Add interactively
-tinyagi provider remove my-proxy      # Remove a custom provider
+zoobot provider list                 # List custom providers
+zoobot provider add                  # Add interactively
+zoobot provider remove my-proxy      # Remove a custom provider
 ```
 
 **API:**
@@ -666,11 +666,11 @@ Use the `custom:<provider_id>` prefix as the agent's provider:
 
 ```bash
 # When adding a new agent (option 4 in provider selection)
-tinyagi agent add
+zoobot agent add
 
 # Switch an existing agent
-tinyagi agent provider coder custom:my-proxy
-tinyagi agent provider coder custom:my-proxy --model gpt-4o
+zoobot agent provider coder custom:my-proxy
+zoobot agent provider coder custom:my-proxy --model gpt-4o
 ```
 
 Or edit settings.json directly:
@@ -717,7 +717,7 @@ The chain ends naturally when an agent responds without mentioning a teammate.
 
 ### Team Configuration
 
-Teams are stored in `~/.tinyagi/settings.json`:
+Teams are stored in `~/.zoobot/settings.json`:
 
 ```json
 {
@@ -744,12 +744,12 @@ Team IDs share the `@` routing namespace with agents, so no collisions are allow
 **CLI Commands:**
 
 ```bash
-tinyagi team list                # List all teams
-tinyagi team add                 # Add a new team (interactive)
-tinyagi team show dev            # Show team configuration
-tinyagi team remove dev          # Remove a team
-tinyagi team add-agent dev reviewer     # Add an existing agent to a team
-tinyagi team remove-agent dev reviewer  # Remove an agent from a team
+zoobot team list                # List all teams
+zoobot team add                 # Add a new team (interactive)
+zoobot team show dev            # Show team configuration
+zoobot team remove dev          # Remove a team
+zoobot team add-agent dev reviewer     # Add an existing agent to a team
+zoobot team remove-agent dev reviewer  # Remove an agent from a team
 ```
 
 **In-chat Commands:**
@@ -782,5 +782,5 @@ Potential features for agent management:
 ## See Also
 
 - [README.md](../README.md) - Main project documentation
-- Setup wizard: `tinyagi setup`
-- Agent CLI: `tinyagi agent --help`
+- Setup wizard: `zoobot setup`
+- Agent CLI: `zoobot agent --help`

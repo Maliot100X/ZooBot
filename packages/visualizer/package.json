@@ -1,5 +1,5 @@
 {
-  "name": "@tinyagi/visualizer",
+  "name": "@zoobot/visualizer",
   "version": "0.0.10",
   "type": "module",
   "main": "dist/team-visualizer.js",

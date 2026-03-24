@@ -1,14 +1,14 @@
 export interface CustomProvider {
     name: string;
-    harness: 'claude' | 'codex';  // which CLI to invoke
-    base_url: string;
+    harness: 'claude' | 'codex' | 'groq';  // which CLI or API to invoke
+    base_url?: string;  // For OpenAI-compatible providers
     api_key: string;
-    model?: string;               // model name to pass to the CLI
+    model?: string;               // model name to pass to the CLI or API
 }
 
 export interface AgentConfig {
     name: string;
-    provider: string;       // 'anthropic', 'openai', 'opencode', or 'custom:<provider_id>'
+    provider: string;       // 'anthropic', 'openai', 'opencode', 'groq', or 'custom:<provider_id>'
     model: string;           // e.g. 'sonnet', 'opus', 'gpt-5.3-codex'
     working_directory: string;
     system_prompt?: string;
@@ -38,7 +38,7 @@ export interface Settings {
         defaults?: Record<string, { agentId: string }>;
     };
     models?: {
-        provider?: string; // 'anthropic', 'openai', or 'opencode'
+        provider?: string; // 'anthropic', 'openai', 'opencode', or 'groq'
         anthropic?: {
             model?: string;
             auth_token?: string;
@@ -48,6 +48,9 @@ export interface Settings {
             auth_token?: string;
         };
         opencode?: {
+            model?: string;
+        };
+        groq?: {
             model?: string;
         };
     };

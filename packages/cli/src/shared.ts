@@ -1,10 +1,10 @@
 import * as p from '@clack/prompts';
 import fs from 'fs';
 import path from 'path';
-import { Settings, SETTINGS_FILE, TINYAGI_HOME, SCRIPT_DIR } from '@tinyagi/core';
+import { Settings, SETTINGS_FILE, ZOOBOT_HOME, SCRIPT_DIR } from '@zoobot/core';
 
 // Re-export for convenience
-export { SETTINGS_FILE, TINYAGI_HOME, SCRIPT_DIR };
+export { SETTINGS_FILE, ZOOBOT_HOME, SCRIPT_DIR };
 
 const BANNER = `
   ▀█▀ █ █▄ █ █▄█ █▀█ █▀▀ █
@@ -12,7 +12,7 @@ const BANNER = `
 `;
 
 /**
- * Print the TinyAGI ASCII banner.
+ * Print the ZooBot ASCII banner.
  */
 export function printBanner(): void {
     console.log(BANNER);

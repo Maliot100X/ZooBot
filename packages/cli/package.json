@@ -1,10 +1,10 @@
 {
-  "name": "@tinyagi/cli",
+  "name": "@zoobot/cli",
   "version": "0.0.10",
   "type": "module",
   "main": "dist/shared.js",
   "bin": {
-    "tinyagi": "./bin/tinyagi.mjs"
+    "zoobot": "./bin/zoobot.mjs"
   },
   "scripts": {
     "build": "tsc",
@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@clack/prompts": "^1.1.0",
-    "@tinyagi/core": "*",
+    "@zoobot/core": "*",
     "open": "^10.0.0"
   }
 }

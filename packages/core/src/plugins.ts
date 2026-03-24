@@ -1,13 +1,13 @@
 /**
- * Plugin System for TinyAGI
+ * Plugin System for ZooBot
  *
- * Plugins auto-discover from .tinyagi/plugins/ folder.
+ * Plugins auto-discover from .zoobot/plugins/ folder.
  * Each plugin exports an activate() function and/or a hooks object from index.ts.
  */
 
 import fs from 'fs';
 import path from 'path';
-import { TINYAGI_HOME } from './config';
+import { ZOOBOT_HOME } from './config';
 import { log, onEvent } from './logging';
 
 // Types
@@ -42,7 +42,7 @@ export interface Hooks {
 export interface PluginContext {
     on(eventType: string | '*', handler: (event: PluginEvent) => void): void;
     log(level: string, message: string): void;
-    getTinyAGIHome(): string;
+    getZooBotHome(): string;
 }
 
 interface LoadedPlugin {
@@ -67,20 +67,20 @@ function createPluginContext(pluginName: string): PluginContext {
         log(level: string, message: string): void {
             log(level, `[plugin:${pluginName}] ${message}`);
         },
-        getTinyAGIHome(): string {
-            return TINYAGI_HOME;
+        getZooBotHome(): string {
+            return ZOOBOT_HOME;
         },
     };
 }
 
 /**
- * Load all plugins from .tinyagi/plugins/.
+ * Load all plugins from .zoobot/plugins/.
  * Each plugin directory should have an index.ts/index.js that exports:
  *   - activate(ctx: PluginContext): void  (optional)
  *   - hooks: Hooks                        (optional)
  */
 export async function loadPlugins(): Promise<void> {
-    const pluginsDir = path.join(TINYAGI_HOME, 'plugins');
+    const pluginsDir = path.join(ZOOBOT_HOME, 'plugins');
 
     if (!fs.existsSync(pluginsDir)) {
         log('DEBUG', 'No plugins directory found');

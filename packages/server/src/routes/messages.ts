@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { log, emitEvent, enqueueMessage, genId, parseAgentRouting, getAgents, getTeams, getSettings } from '@tinyagi/core';
+import { log, emitEvent, enqueueMessage, genId, parseAgentRouting, getAgents, getTeams, getSettings } from '@zoobot/core';
 
 const app = new Hono();
 

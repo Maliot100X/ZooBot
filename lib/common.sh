@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Common utilities and configuration for TinyAGI
-# Sourced by main tinyagi.sh script
+# Common utilities and configuration for ZooBot
+# Sourced by main zoobot.sh script
 # Compatible with bash 3.2+ (no associative arrays)
 
 # Colors
@@ -121,7 +121,7 @@ load_settings() {
     WORKSPACE_PATH=$(jq -r '.workspace.path // empty' "$SETTINGS_FILE" 2>/dev/null)
     if [ -z "$WORKSPACE_PATH" ]; then
         # Fallback for old configs without workspace
-        WORKSPACE_PATH="$HOME/tinyagi-workspace"
+        WORKSPACE_PATH="$HOME/zoobot-workspace"
     fi
 
     # Read enabled channels array (empty is OK — channels are optional)

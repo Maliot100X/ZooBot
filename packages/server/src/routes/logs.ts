@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { Hono } from 'hono';
-import { LOG_FILE } from '@tinyagi/core';
+import { LOG_FILE } from '@zoobot/core';
 
 const app = new Hono();
 

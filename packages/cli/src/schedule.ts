@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import * as p from '@clack/prompts';
-import { getSchedules, addSchedule, removeSchedule } from '@tinyagi/core';
+import { getSchedules, addSchedule, removeSchedule } from '@zoobot/core';
 import { unwrap, required, requireSettings, printBanner } from './shared.ts';
 
 // --- schedule list ---
@@ -15,7 +15,7 @@ function scheduleList(agentFilter?: string) {
         p.log.warn(agentFilter
             ? `No schedules found for agent @${agentFilter}.`
             : 'No schedules found.');
-        p.log.message('Create one with: tinyagi schedule create');
+        p.log.message('Create one with: zoobot schedule create');
         return;
     }
 
@@ -40,7 +40,7 @@ async function scheduleCreate() {
     const agentIds = Object.keys(agents);
 
     if (agentIds.length === 0) {
-        p.log.error('No agents configured. Add an agent first with: tinyagi agent add');
+        p.log.error('No agents configured. Add an agent first with: zoobot agent add');
         process.exit(1);
     }
 
@@ -142,9 +142,9 @@ async function run() {
         default:
             p.log.error(`Unknown schedule command: ${command || '(none)'}`);
             p.log.message('Usage:');
-            p.log.message('  tinyagi schedule list [--agent ID]');
-            p.log.message('  tinyagi schedule create');
-            p.log.message('  tinyagi schedule delete <id-or-label>');
+            p.log.message('  zoobot schedule list [--agent ID]');
+            p.log.message('  zoobot schedule create');
+            p.log.message('  zoobot schedule delete <id-or-label>');
             process.exit(1);
     }
 }

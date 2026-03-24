@@ -1,5 +1,5 @@
 /**
- * @tinyagi/teams — Team conversation orchestration.
+ * @zoobot/teams — Team conversation orchestration.
  *
  * Handles agent-to-agent communication, teammate mentions,
  * chat rooms, and conversation completion.

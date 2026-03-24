@@ -3,17 +3,17 @@ import * as p from '@clack/prompts';
 import fs from 'fs';
 import path from 'path';
 import {
-    TINYAGI_HOME, SCRIPT_DIR,
+    ZOOBOT_HOME, SCRIPT_DIR,
     loadPairingState, savePairingState, approvePairingCode,
     PairingPendingEntry, PairingApprovedEntry,
-} from '@tinyagi/core';
+} from '@zoobot/core';
 
 function getPairingFilePath(): string {
-    const localSettings = path.join(SCRIPT_DIR, '.tinyagi', 'settings.json');
+    const localSettings = path.join(SCRIPT_DIR, '.zoobot', 'settings.json');
     if (fs.existsSync(localSettings)) {
-        return path.join(SCRIPT_DIR, '.tinyagi', 'pairing.json');
+        return path.join(SCRIPT_DIR, '.zoobot', 'pairing.json');
     }
-    return path.join(TINYAGI_HOME, 'pairing.json');
+    return path.join(ZOOBOT_HOME, 'pairing.json');
 }
 
 function ensurePairingFile(): string {
