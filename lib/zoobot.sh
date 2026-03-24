@@ -23,7 +23,7 @@ mkdir -p "$LOG_DIR"
 
 # Source library files (daemon runtime only — user commands are in packages/cli/)
 source "$SCRIPT_DIR/lib/common.sh"
-source "$SCRIPT_DIR/lib/daemon.sh"
+source "$SCRIPT_DIR/lib/zoobot-daemon.sh"
 source "$SCRIPT_DIR/lib/update.sh"
 
 CLI="$SCRIPT_DIR/packages/cli/dist"
