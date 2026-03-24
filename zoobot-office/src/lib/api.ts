@@ -66,6 +66,14 @@ export interface TeamConfig {
   leader_agent: string;
 }
 
+export interface CustomProvider {
+  name: string;
+  harness: "claude" | "codex" | "groq";
+  base_url?: string;
+  api_key: string;
+  model?: string;
+}
+
 export interface Settings {
   workspace?: { path?: string; name?: string };
   channels?: {
@@ -73,14 +81,17 @@ export interface Settings {
     discord?: { bot_token?: string };
     telegram?: { bot_token?: string };
     whatsapp?: Record<string, unknown>;
+    defaults?: Record<string, { agentId: string }>;
   };
   models?: {
     provider?: string;
-    anthropic?: { model?: string };
-    openai?: { model?: string };
+    anthropic?: { model?: string; auth_token?: string };
+    openai?: { model?: string; auth_token?: string; base_url?: string };
     opencode?: { model?: string };
+    groq?: { model?: string; auth_token?: string; base_url?: string };
   };
   agents?: Record<string, AgentConfig>;
+  custom_providers?: Record<string, CustomProvider>;
   teams?: Record<string, TeamConfig>;
   monitoring?: { heartbeat_interval?: number };
 }

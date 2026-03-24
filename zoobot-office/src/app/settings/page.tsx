@@ -266,6 +266,11 @@ export default function SettingsPage() {
               title="Heartbeat"
               value={settings.monitoring?.heartbeat_interval ? `${settings.monitoring.heartbeat_interval}s` : "Disabled"}
             />
+            <OverviewCard
+              icon={<Cpu className="h-4 w-4 text-muted-foreground" />}
+              title="Custom Providers"
+              value={String(Object.keys(settings.custom_providers || {}).length)}
+            />
           </div>
 
           <Card>
@@ -286,6 +291,56 @@ export default function SettingsPage() {
                 className="font-mono text-xs leading-relaxed"
                 spellCheck={false}
               />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm">Provider Configuration Snapshot</CardTitle>
+              <CardDescription>
+                Read-only summary of the current provider auth/config state exposed by ZooBot.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4 text-sm">
+              <div>
+                <p className="font-medium mb-1">Global provider</p>
+                <code className="text-xs">{settings.models?.provider || "anthropic"}</code>
+              </div>
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                <div>
+                  <p className="font-medium mb-1">OpenAI</p>
+                  <ul className="text-xs text-muted-foreground space-y-1">
+                    <li>Model: {settings.models?.openai?.model || "—"}</li>
+                    <li>Auth token: {settings.models?.openai?.auth_token ? "configured" : "not set"}</li>
+                    <li>Base URL: {settings.models?.openai?.base_url || "default"}</li>
+                  </ul>
+                </div>
+                <div>
+                  <p className="font-medium mb-1">Groq</p>
+                  <ul className="text-xs text-muted-foreground space-y-1">
+                    <li>Model: {settings.models?.groq?.model || "—"}</li>
+                    <li>Auth token: {settings.models?.groq?.auth_token ? "configured" : "not set"}</li>
+                    <li>Base URL: {settings.models?.groq?.base_url || "default"}</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <p className="font-medium mb-2">Custom providers</p>
+                {Object.keys(settings.custom_providers || {}).length === 0 ? (
+                  <p className="text-xs text-muted-foreground">No custom providers configured yet.</p>
+                ) : (
+                  <div className="space-y-2">
+                    {Object.entries(settings.custom_providers || {}).map(([id, provider]) => (
+                      <div key={id} className="rounded border p-2">
+                        <div className="font-mono text-xs">{id}</div>
+                        <div className="text-xs text-muted-foreground">
+                          {provider.harness} · {provider.base_url || "no base URL"} · token {provider.api_key ? "configured" : "missing"}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </CardContent>
           </Card>
 
