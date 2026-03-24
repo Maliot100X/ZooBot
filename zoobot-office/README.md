@@ -1,92 +1,100 @@
-# TinyOffice
+# ZooOffice 🌐
 
-Web portal for ZooBot. TinyOffice provides a browser UI for monitoring and operating your agent system.
+<div align="center">
+  <img src="../docs/assets/zoobot-office.png" alt="ZooOffice" width="700" />
+</div>
+
+ZooOffice is the web portal for ZooBot — manage agents, teams, tasks, and chat from any browser.
 
 ## Features
 
-- Real-time dashboard (agents, teams, queue, event feed)
-- Web chat console with `@agent` / `@team` routing
-- Agent management (create, edit, delete)
-- Team management (members + leader)
-- Task board (kanban + drag/drop + assign to agents/teams)
-- Logs and live events view
-- Settings editor for `.zoobot/settings.json`
-- Office simulation view of agent/team interactions
+- **Dashboard** — Real-time queue overview and live event feed
+- **Chat Console** — Send messages to any agent or team
+- **Agents & Teams** — Create, edit, and remove
+- **Kanban Board** — Drag tasks across stages, assign to agents/teams
+- **Logs & Events** — Full streaming event log
+- **Settings** — Edit ZooBot configuration via UI
+- **Office View** — Visual simulation of agent interactions
+- **Org Chart** — Hierarchical visualization of teams and agents
+- **Chat Rooms** — Slack-style persistent chat rooms per team
+- **Projects** — Project-level task management with filtered kanban boards
 
-## Requirements
-
-- Node.js 18+
-- Running ZooBot backend/API (default: `http://localhost:3777`)
-
-## Setup
+## Running ZooOffice
 
 ```bash
-cd tinyoffice
+zoobot office   # Starts on http://localhost:3000
+```
+
+ZooOffice auto-detects when dependencies or builds are needed and starts the production server.
+
+For development with hot-reload:
+
+```bash
+cd zoobot-office
 npm install
-```
-
-## Configuration
-
-TinyOffice reads the backend base URL from `NEXT_PUBLIC_API_URL`.
-
-Default:
-
-- `http://localhost:3777`
-
-If needed, create `tinyoffice/.env.local`:
-
-```bash
-NEXT_PUBLIC_API_URL=http://localhost:3777
-```
-
-## Run
-
-Development:
-
-```bash
 npm run dev
 ```
 
-Open `http://localhost:3000`.
-
-Production:
+If ZooBot API is on a different host/port:
 
 ```bash
-npm run build
-npm run start
+cd zoobot-office
+echo 'NEXT_PUBLIC_API_URL=http://localhost:3777' > .env.local
 ```
 
-## Scripts
+## Architecture
 
-- `npm run dev` - Start Next.js dev server
-- `npm run build` - Build production bundle
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
+ZooOffice connects to your local ZooBot API at `http://localhost:3777`. It is a React/Next.js application with:
 
-## API Endpoints Used
+- **Recharts** — Dashboard charts and event visualization
+- **Kanban** — Drag-and-drop task board with stage filtering
+- **Agent Cards** — Configuration UI for each agent
+- **Team Graph** — D3-based org chart and team visualizer
+- **Chat Console** — Real-time messaging interface
+- **Log Viewer** — SSE-based streaming log display
 
-TinyOffice calls ZooBot API endpoints such as:
+## File Structure
 
-- `POST /api/message`
-- `GET /api/agents`
-- `PUT /api/agents/:id`
-- `DELETE /api/agents/:id`
-- `GET /api/teams`
-- `PUT /api/teams/:id`
-- `DELETE /api/teams/:id`
-- `GET /api/tasks`
-- `POST /api/tasks`
-- `PUT /api/tasks/:id`
-- `PUT /api/tasks/reorder`
-- `DELETE /api/tasks/:id`
-- `GET /api/settings`
-- `PUT /api/settings`
-- `GET /api/queue/status`
-- `GET /api/responses`
-- `GET /api/logs`
-- `GET /api/events/stream` (SSE)
+```
+zoobot-office/
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx
+│   │   ├── page.tsx           # Dashboard
+│   │   ├── chat/
+│   │   ├── agents/
+│   │   ├── teams/
+│   │   ├── tasks/             # Kanban board
+│   │   ├── logs/
+│   │   └── settings/
+│   ├── components/
+│   │   ├── Dashboard.tsx
+│   │   ├── ChatConsole.tsx
+│   │   ├── KanbanBoard.tsx
+│   │   ├── AgentCard.tsx
+│   │   ├── TeamGraph.tsx
+│   │   └── LogViewer.tsx
+│   └── lib/
+│       └── api.ts             # ZooBot API client
+├── public/
+└── package.json
+```
 
-## Notes
+## API
 
-- TinyOffice is UI-only; it does not replace ZooBot daemon processes.
-- Start ZooBot first so queue processor, channels, and API are available.
+ZooOffice communicates with ZooBot via the REST API at `localhost:3777`:
+
+```bash
+GET  /api/status           # System status
+GET  /api/agents           # List agents
+POST /api/agents            # Create agent
+GET  /api/teams            # List teams
+POST /api/teams            # Create team
+GET  /api/queue            # Queue stats
+POST /api/message          # Send message
+GET  /api/logs             # Stream logs (SSE)
+```
+
+---
+
+Built by [@KaiNovasWarm](https://x.com/KaiNovasWarm) · MIT License
