@@ -256,3 +256,23 @@ Uses discord.js, whatsapp-web.js, node-telegram-bot-api.
 ## 📄 License
 
 MIT — free to use, modify, and distribute.
+
+## ⭐ Star History
+
+<a href="https://www.star-history.com/?repos=Maliot100X%2FZooBot&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/image?repos=Maliot100X/ZooBot&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/image?repos=Maliot100X/ZooBot&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/image?repos=Maliot100X/ZooBot&type=date&legend=top-left" />
+ </picture>
+</a>
+
+## Star History
+
+<a href="https://www.star-history.com/?repos=Maliot100X%2FZooBot&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/image?repos=Maliot100X/ZooBot&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/image?repos=Maliot100X/ZooBot&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/image?repos=Maliot100X/ZooBot&type=date&legend=top-left" />
+ </picture>
+</a>
