@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getSettings, updateSettings, checkConnection, getApiBase, setApiBase, type Settings } from "@/lib/api";
+import { getSettings, updateSettings, checkConnection, getApiBase, setApiBase, getProviderAuthState, type ProviderAuthState, type Settings } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,6 +30,7 @@ export default function SettingsPage() {
   const [status, setStatus] = useState<"idle" | "saved" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [needsSetup, setNeedsSetup] = useState(false);
+  const [providerAuthState, setProviderAuthState] = useState<ProviderAuthState | null>(null);
 
   // Connection state
   const [connected, setConnected] = useState<boolean | null>(null);
@@ -54,6 +55,11 @@ export default function SettingsPage() {
     try {
       const s = await getSettings();
       setSettings(s);
+      try {
+        setProviderAuthState(await getProviderAuthState());
+      } catch {
+        setProviderAuthState(null);
+      }
       setRawJson(JSON.stringify(s, null, 2));
       const isEmpty = !s || (Object.keys(s).length === 0) ||
         (!s.agents && !s.models?.provider);
@@ -308,19 +314,22 @@ export default function SettingsPage() {
               </div>
               <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                 <div>
-                  <p className="font-medium mb-1">OpenAI</p>
+                  <p className="font-medium mb-1">OpenAI / Codex</p>
                   <ul className="text-xs text-muted-foreground space-y-1">
                     <li>Model: {settings.models?.openai?.model || "—"}</li>
-                    <li>Auth token: {settings.models?.openai?.auth_token ? "configured" : "not set"}</li>
-                    <li>Base URL: {settings.models?.openai?.base_url || "default"}</li>
+                    <li>Configured API key: {providerAuthState?.openai.configured_api_key ? "yes" : "no"}</li>
+                    <li>Base URL: {providerAuthState?.openai.configured_base_url || settings.models?.openai?.base_url || "default"}</li>
+                    <li>Codex CLI: {providerAuthState?.openai.codex.cli_installed ? "installed" : "missing"}</li>
+                    <li>Codex auth cache: {providerAuthState?.openai.codex.auth_file_exists ? "present" : "not found"}</li>
+                    <li>Device auth: {providerAuthState?.openai.codex.supports_device_auth ? "supported" : "not supported"}</li>
                   </ul>
                 </div>
                 <div>
                   <p className="font-medium mb-1">Groq</p>
                   <ul className="text-xs text-muted-foreground space-y-1">
                     <li>Model: {settings.models?.groq?.model || "—"}</li>
-                    <li>Auth token: {settings.models?.groq?.auth_token ? "configured" : "not set"}</li>
-                    <li>Base URL: {settings.models?.groq?.base_url || "default"}</li>
+                    <li>Configured API key: {providerAuthState?.groq.configured_api_key ? "yes" : "no"}</li>
+                    <li>Base URL: {providerAuthState?.groq.configured_base_url || settings.models?.groq?.base_url || "default"}</li>
                   </ul>
                 </div>
               </div>

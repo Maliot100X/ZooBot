@@ -96,6 +96,23 @@ export interface Settings {
   monitoring?: { heartbeat_interval?: number };
 }
 
+export interface ProviderAuthState {
+  openai: {
+    configured_api_key: boolean;
+    configured_base_url: string | null;
+    codex: {
+      cli_installed: boolean;
+      auth_file_path: string;
+      auth_file_exists: boolean;
+      supports_device_auth: boolean;
+    };
+  };
+  groq: {
+    configured_api_key: boolean;
+    configured_base_url: string | null;
+  };
+}
+
 export interface QueueStatus {
   incoming: number;
   processing: number;
@@ -177,6 +194,10 @@ export async function applyServices(): Promise<{ ok: boolean; started: string[];
 
 export async function getQueueStatus(): Promise<QueueStatus> {
   return apiFetch("/api/queue/status");
+}
+
+export async function getProviderAuthState(): Promise<ProviderAuthState> {
+  return apiFetch("/api/provider-auth-state");
 }
 
 export async function getResponses(limit = 20): Promise<ResponseData[]> {
