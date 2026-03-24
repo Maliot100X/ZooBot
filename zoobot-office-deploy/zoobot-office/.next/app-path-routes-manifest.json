@@ -1,0 +1,18 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/agents/[id]/page": "/agents/[id]",
+  "/agents/page": "/agents",
+  "/chat/team/[id]/page": "/chat/team/[id]",
+  "/favicon.ico/route": "/favicon.ico",
+  "/icon.svg/route": "/icon.svg",
+  "/logs/page": "/logs",
+  "/office/org-chart/page": "/office/org-chart",
+  "/office/page": "/office",
+  "/page": "/",
+  "/projects/[id]/page": "/projects/[id]",
+  "/projects/page": "/projects",
+  "/settings/page": "/settings",
+  "/tasks/page": "/tasks",
+  "/teams/page": "/teams"
+}

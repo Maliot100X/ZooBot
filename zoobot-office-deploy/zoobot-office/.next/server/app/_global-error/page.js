@@ -1,0 +1,11 @@
+var R=require("../../chunks/ssr/[turbopack]_runtime.js")("server/app/_global-error/page.js")
+R.c("server/chunks/ssr/[root-of-the-server]__c5d79ae4._.js")
+R.c("server/chunks/ssr/zoobot-office_5e11dff5._.js")
+R.c("server/chunks/ssr/24d51_next_dist_5a35e575._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__560427ba._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__12039d64._.js")
+R.c("server/chunks/ssr/24d51_next_dist_74fe05be._.js")
+R.c("server/chunks/ssr/zoobot-office_src_app_ac14902f._.js")
+R.c("server/chunks/ssr/zoobot-office__next-internal_server_app__global-error_page_actions_147c91d7.js")
+R.m(74459)
+module.exports=R.m(74459).exports
