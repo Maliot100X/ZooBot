@@ -37,12 +37,17 @@ if [ -f "$INSTALL_HOME/package.json" ]; then
     npm run build 2>/dev/null || npx tsc --build
 fi
 
-# Create bin wrapper
+# Create bin wrapper - use absolute path resolution
 mkdir -p "$INSTALL_HOME/bin"
-cat > "$INSTALL_HOME/bin/zoobot" << 'WRAPPER'
+cat > "$INSTALL_HOME/bin/zoobot" << WRAPPER
 #!/usr/bin/env bash
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-exec node "$SCRIPT_DIR/packages/cli/bin/zoobot.mjs" "$@"
+# Resolve symlink to get actual script location
+SOURCE="\${BASH_SOURCE[0]}"
+while [ -L "\$SOURCE" ]; do
+    SOURCE="\$(readlink -f "\$SOURCE")"
+done
+ZOOBOT_ROOT="\$(cd "\$(dirname "\$SOURCE")/.." && pwd)"
+exec node "\$ZOOBOT_ROOT/packages/cli/bin/zoobot.mjs" "\$@"
 WRAPPER
 chmod +x "$INSTALL_HOME/bin/zoobot"
 
@@ -57,8 +62,9 @@ done
 mkdir -p "$INSTALL_HOME/scripts"
 cat > "$INSTALL_HOME/scripts/zoobot-daemon.sh" << 'DAEMON'
 #!/usr/bin/env bash
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-export ZOOBOT_HOME="$(dirname "$SCRIPT_DIR")"
+SOURCE="${BASH_SOURCE[0]}"
+while [ -L "$SOURCE" ]; do SOURCE=$(readlink -f "$SOURCE"); done
+export ZOOBOT_HOME="$(dirname "$(dirname "$SOURCE")")"
 exec node "$ZOOBOT_HOME/packages/cli/bin/zoobot.mjs" start "$@"
 DAEMON
 chmod +x "$INSTALL_HOME/scripts/zoobot-daemon.sh"
