@@ -1,0 +1,18 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/agents/[id]/page": "app/agents/[id]/page.js",
+  "/agents/page": "app/agents/page.js",
+  "/chat/team/[id]/page": "app/chat/team/[id]/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/icon.svg/route": "app/icon.svg/route.js",
+  "/logs/page": "app/logs/page.js",
+  "/office/org-chart/page": "app/office/org-chart/page.js",
+  "/office/page": "app/office/page.js",
+  "/page": "app/page.js",
+  "/projects/[id]/page": "app/projects/[id]/page.js",
+  "/projects/page": "app/projects/page.js",
+  "/settings/page": "app/settings/page.js",
+  "/tasks/page": "app/tasks/page.js",
+  "/teams/page": "app/teams/page.js"
+}

@@ -1,0 +1,3 @@
+module.exports=[63086,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(63754);a.n(d("[project]/zoobot-office/node_modules/next/dist/client/components/builtin/global-error.js <module evaluation>"))},62738,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(63754);a.n(d("[project]/zoobot-office/node_modules/next/dist/client/components/builtin/global-error.js"))},17814,a=>{"use strict";a.i(63086);var b=a.i(62738);a.n(b)}];
+
+//# sourceMappingURL=24d51_next_dist_client_components_builtin_global-error_36484ef2.js.map

@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/office/layout,_N_T_/office/org-chart/layout,_N_T_/office/org-chart/page,_N_T_/office/org-chart"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/office/org-chart/__PAGE__",
+    "/office/org-chart",
+    "/office",
+    "/_index",
+    "/_head"
+  ]
+}

@@ -1,0 +1,6 @@
+1:"$Sreact.fragment"
+2:I[62924,["/_next/static/chunks/d37539282626648b.js","/_next/static/chunks/9c7b83aec6a0f66f.js"],"ViewportBoundary"]
+3:I[62924,["/_next/static/chunks/d37539282626648b.js","/_next/static/chunks/9c7b83aec6a0f66f.js"],"MetadataBoundary"]
+4:"$Sreact.suspense"
+5:I[26369,["/_next/static/chunks/d37539282626648b.js","/_next/static/chunks/9c7b83aec6a0f66f.js"],"IconMark"]
+0:{"buildId":"flh15zw-oo_3YckyIfC4n","rsc":["$","$1","h",{"children":[null,["$","$L2",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L3",null,{"children":["$","$4",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"ZooBot | The AI Company Emulator"}],["$","meta","1",{"name":"description","content":"The AI Company Emulator"}],["$","link","2",{"rel":"icon","href":"/favicon.ico?favicon.0b3bf435.ico","sizes":"256x256","type":"image/x-icon"}],["$","link","3",{"rel":"icon","href":"/icon.svg?icon.6d94f9c2.svg","sizes":"any","type":"image/svg+xml"}],["$","$L5","4",{}]]}]}]}],null]}],"loading":null,"isPartial":false}
