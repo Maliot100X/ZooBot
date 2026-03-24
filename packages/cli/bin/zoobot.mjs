@@ -10,7 +10,7 @@ import { writeDefaults, ZOOBOT_HOME } from '../lib/defaults.mjs';
 
 const INSTALL_DIR = ZOOBOT_HOME;
 const GITHUB_REPO = 'ZooBot/zoobot';
-const PORTAL_URL = 'https://office.zoobotcompany.com';
+const PORTAL_URL = 'https://office.zoobot.ai';
 
 const GREEN = '\x1b[32m';
 const YELLOW = '\x1b[33m';

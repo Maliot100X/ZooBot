@@ -1,319 +1,258 @@
 # ZooBot 🤖
 
 <div align="center">
-  <img src="./docs/assets/zoobot-logo.png" alt="ZooBot" width="600" />
+  <img src="./docs/assets/zoobot-brand.png" alt="ZooBot" width="800" />
   <h1>ZooBot 🤖</h1>
-  <p><strong>Multi-agent, Multi-team, Multi-channel, 24/7 AI assistant</strong></p>
-  <p>Run multiple teams of AI agents that collaborate with each other simultaneously with isolated workspaces.</p>
+  <p><strong>Multi-team AI agents — free, fast, and yours to own.</strong></p>
+  <p>Run teams of AI agents that collaborate together. Powered by Groq's free inference. No credit card needed.</p>
   <p>
-    <img src="https://img.shields.io/badge/stability-experimental-orange.svg" alt="Experimental" />
+    <a href="https://github.com/Maliot100X/ZooBot">
+      <img src="https://img.shields.io/github/stars/Maliot100X/ZooBot?style=social" alt="Stars" />
+    </a>
     <a href="https://opensource.org/licenses/MIT">
       <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License" />
     </a>
     <a href="https://x.com/KaiNovasWarm">
-      <img src="https://img.shields.io/twitter/url/x/KaiNovasWarm?style=social" alt="X (Twitter)" />
-    </a>
-    <a href="https://github.com/Maliot100X/ZooBot/releases/latest">
-      <img src="https://img.shields.io/github/v/release/Maliot100X/ZooBot?label=Latest&color=green" alt="Latest Release" />
+      <img src="https://img.shields.io/twitter/follow/KaiNovasWarm?style=social&logo=X" alt="X/Twitter" />
     </a>
   </p>
 </div>
 
-<div align="center">
-  <video src="./docs/videos/zoobot-demo.mp4" width="600" controls></video>
-</div>
+---
 
-## ✨ Features
+## ✨ What ZooBot Does
 
-- ✅ **Multi-agent** - Run multiple isolated AI agents with specialized roles
-- ✅ **Multi-team collaboration** - Agents hand off work to teammates via chain execution and fan-out
-- ✅ **Multi-channel** - Discord, WhatsApp, and Telegram
-- ✅ **Web portal (ZooOffice)** - Browser-based dashboard for chat, agents, teams, tasks, logs, and settings
-- ✅ **Team chat rooms** - Persistent async chat rooms per team with real-time CLI viewer
-- ✅ **Multiple AI providers** - Anthropic Claude, OpenAI Codex, Groq (FREE), and custom providers (any OpenAI/Anthropic-compatible endpoint)
-- ✅ **Auth token management** - Store API keys per provider, no separate CLI auth needed
-- ✅ **Parallel processing** - Agents process messages concurrently
-- ✅ **Live TUI dashboard** - Real-time team visualizer and chatroom viewer
-- ✅ **Persistent sessions** - Conversation context maintained across restarts
-- ✅ **SQLite queue** - Atomic transactions, retry logic, dead-letter management
-- ✅ **Plugin system** - Extend ZooBot with custom plugins for message hooks and event listeners
-- ✅ **24/7 operation** - Runs in tmux for always-on availability
+- **Agents** — Multiple AI agents, each with their own workspace and conversation memory
+- **Teams** — Agents hand off tasks to each other like a real team
+- **Free AI** — Runs on Groq's free tier. No Anthropic subscription needed. No OpenAI credits needed.
+- **Channels** — Connect Discord, Telegram, WhatsApp, or chat via web/API
+- **Queue** — SQLite-backed message queue with retry logic and dead-letter handling
+- **Plugins** — Extend ZooBot with custom hooks and event listeners
+- **Always-on** — Runs 24/7 in tmux. Survives restarts.
 
-## Community
+---
 
-Follow us on X: [@KaiNovasWarm](https://x.com/KaiNovasWarm)
+## 🚀 Get Started
 
-## 🚀 Quick Start
-
-### Prerequisites
-
-- macOS, Linux and Windows (WSL2)
-- Node.js v18+
-- tmux, jq
-- Bash 3.2+
-- **Groq API key** (FREE at console.groq.com) — No CLI needed!
-- [Claude Code CLI](https://claude.com/claude-code) (for Anthropic provider)
-- [Codex CLI](https://docs.openai.com/codex) (for OpenAI provider)
-
-### Installation & First Run
+### One-line install
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Maliot100X/ZooBot/main/scripts/install.sh | bash
 ```
 
-This downloads and installs the `zoobot` command globally. Then just run:
+Then just run:
 
 ```bash
-zoobot groq set-key YOUR_KEY
 zoobot
 ```
 
-That's it. ZooBot auto-creates default settings, starts the daemon, and opens ZooOffice in your browser.
+That's it. ZooBot auto-creates config, starts the daemon, and opens ZooOffice in your browser.
 
-- **Default workspace:** `~/zoobot-workspace`
-- **Default agent:** `zoobot` (Groq/llama-3.3-70b-versatile — FREE!)
-- **Channels:** none initially — add later with `zoobot channel setup`
+### Requirements
 
-<details>
-<summary><b>Development (run from source repo)</b></summary>
+- macOS, Linux, Windows (WSL2)
+- Node.js v18+
+- tmux, jq
+- Bash 3.2+
+- Groq API key (free at [console.groq.com](https://console.groq.com))
+
+### Set your Groq key
 
 ```bash
-git clone https://github.com/Maliot100X/ZooBot.git
-cd ZooBot && npm install && npm run build
-ZOOBOT_API_KEY=YOUR_KEY npx zoobot start
-npx zoobot agent list
+export GROQ_API_KEY=gsk_your_key_here
 ```
-</details>
+
+Or add it to your `~/.zoobot/settings.json`:
+
+```json
+{
+  "models": {
+    "provider": "groq",
+    "groq": {
+      "model": "llama-3.3-70b-versatile",
+      "auth_token": "gsk_your_key_here"
+    }
+  }
+}
+```
+
+### Free Groq models
+
+| Model | Context | Best for |
+|-------|---------|----------|
+| `llama-3.3-70b-versatile` | 128k | General purpose, coding, reasoning |
+| `llama-3.1-8b-instant` | 128k | Fast lightweight responses |
+| `mixtral-8x7b-32768` | 32k | Code and technical tasks |
+| `llama-3.2-11b-vision-preview` | 128k | Image understanding |
+| `allam-2-7b` | 128k | Scientific and research |
 
 ---
 
-## 🆓 Use Groq for FREE (No CLI Required)
+## 📁 Project Structure
 
-ZooBot has built-in Groq support with llama-3.3-70b-versatile — completely free, no CLI installation needed!
-
-```bash
-zoobot groq set-key YOUR_GROQ_KEY
-zoobot groq models           # List available models
-zoobot groq set-key gsk_Ump5sabkISyIMJHaCnhhWGdyb3F...  # You're all set!
+```
+zoobot/
+├── packages/
+│   ├── core/          # Queue, agents, teams, adapters (Groq, Claude, Codex)
+│   ├── cli/           # CLI commands: agent, team, channel, model
+│   ├── channels/      # Discord, Telegram, WhatsApp connectors
+│   ├── mai/           # Messaging integration
+│   └── visualizer/    # Live TUI dashboard
+├── zoobot-office/     # Web portal (React + Tailwind)
+│   └── src/
+│       ├── pages/     # Dashboard, chat, kanban, logs, settings
+│       └── components/# Recharts, Kanban board, agent cards
+├── scripts/           # install.sh, update.sh, daemon, heartbeat
+├── lib/               # Shell helpers
+├── bin/               # zoobot CLI wrapper
+├── docs/              # AGENTS.md, TEAMS.md, QUEUE.md, TROUBLESHOOTING.md
+└── external/
+    └── everything-claude-code/  # Skills & instincts system
 ```
 
-**Available Groq models:**
-- `llama-3.3-70b-versatile` — Best overall, huge context
-- `llama-3.1-8b-instant` — Fast, free tier
-- `mixtral-8x7b-32768` — Good for coding
+---
+
+## 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     Message Channels                         │
+│         (Discord, Telegram, WhatsApp, Web, API)             │
+└────────────────────┬────────────────────────────────────────┘
+                     │ enqueueMessage()
+                     ↓
+┌─────────────────────────────────────────────────────────────┐
+│               ~/.zoobot/zoobot.db (SQLite)                │
+│                                                              │
+│  messages: pending → processing → completed / dead          │
+│  responses: pending → acked                                  │
+│                                                              │
+└────────────────────┬────────────────────────────────────────┘
+                     │ Queue Processor
+                     ↓
+┌─────────────────────────────────────────────────────────────┐
+│              Parallel Processing by Agent                    │
+│                                                              │
+│  Agent: coder        Agent: writer       Agent: assistant   │
+│  ┌──────────┐       ┌──────────┐        ┌──────────┐       │
+│  │ Message 1│       │ Message 1│        │ Message 1│       │
+│  │ Message 2│  ...  │ Message 2│  ...   │ Message 2│  ...  │
+│  │ Message 3│       │          │        │          │       │
+│  └────┬─────┘       └────┬─────┘        └────┬─────┘       │
+│       │                  │                     │             │
+└───────┼──────────────────┼─────────────────────┼────────────┘
+        ↓                  ↓                     ↓
+   Groq API / CLI     Groq API / CLI        Groq API / CLI
+  (workspace/coder)  (workspace/writer)   (workspace/assistant)
+```
+
+**Key features:**
+
+- **SQLite queue** — Atomic transactions via WAL mode, no race conditions
+- **Parallel agents** — Different agents process messages concurrently
+- **Sequential per agent** — Preserves conversation order within each agent
+- **Retry & dead-letter** — Failed messages retry up to 5 times, then enter dead-letter queue
+- **Isolated workspaces** — Each agent has its own directory and context
 
 ---
 
 ## 📋 Commands
 
-### Core Commands
+```bash
+zoobot              # Install, configure, start, open ZooOffice
+zoobot start       # Start daemon
+zoobot stop        # Stop all processes
+zoobot status      # Check what's running
+zoobot logs all    # Tail all logs
+zoobot logs agent  # Agent logs only
 
-| Command | Description | Example |
-| ------- | ----------- | ------- |
-| *(no command)* | Install, configure defaults, start, and open ZooOffice | `zoobot` |
-| `start` | Start ZooBot daemon | `zoobot start` |
-| `stop` | Stop all processes | `zoobot stop` |
-| `restart` | Restart ZooBot | `zoobot restart` |
-| `status` | Show current status and activity | `zoobot status` |
-| `channel setup` | Configure channels interactively | `zoobot channel setup` |
-| `logs [type]` | View logs (discord/telegram/whatsapp/queue/heartbeat/all) | `zoobot logs queue` |
-| `attach` | Attach to tmux session | `zoobot attach` |
+zoobot agent list          # List all agents
+zoobot agent add           # Create new agent
+zoobot agent remove <id>   # Remove agent
+zoobot agent reset <id>    # Reset conversation
 
-### Agent Commands
+zoobot team list           # List all teams
+zoobot team add            # Create new team
+zoobot team show <id>      # Show team config
 
-| Command | Description | Example |
-| ------- | ----------- | ------- |
-| `agent list` | List all configured agents | `zoobot agent list` |
-| `agent add` | Add new agent (interactive) | `zoobot agent add` |
-| `agent show <id>` | Show agent configuration | `zoobot agent show coder` |
-| `agent remove <id>` | Remove an agent | `zoobot agent remove coder` |
-| `agent reset <id>` | Reset agent conversation | `zoobot agent reset coder` |
-| `agent provider <id> [provider]` | Show or set agent's AI provider | `zoobot agent provider coder anthropic` |
-| `agent provider <id> <p> --model <m>` | Set agent's provider and model | `zoobot agent provider coder openai --model gpt-5.3-codex` |
+zoobot model <name>        # Set default model
+zoobot provider <name>     # Switch provider
 
-### Team Commands
+zoobot channel setup telegram   # Setup Telegram
+zoobot channel setup discord    # Setup Discord
+zoobot channel setup whatsapp   # Setup WhatsApp
 
-| Command | Description | Example |
-| ------- | ----------- | ------- |
-| `team list` | List all configured teams | `zoobot team list` |
-| `team add` | Add new team (interactive) | `zoobot team add` |
-| `team show <id>` | Show team configuration | `zoobot team show dev` |
-| `team remove <id>` | Remove a team | `zoobot team remove dev` |
-| `team add-agent <t> <a>` | Add an existing agent to a team | `zoobot team add-agent dev reviewer` |
-| `team remove-agent <t> <a>` | Remove an agent from a team | `zoobot team remove-agent dev reviewer` |
-| `team visualize [id]` | Live TUI dashboard for team chains | `zoobot team visualize dev` |
-
-### Chatroom Commands
-
-| Command | Description | Example |
-| ------- | ----------- | ------- |
-| `chatroom <team>` | Real-time TUI viewer with type-to-send | `zoobot chatroom dev` |
-| `office` | Start ZooOffice web portal on port 3000 | `zoobot office` |
-
-Every team has a persistent chat room. Agents post to it using `[#team_id: message]` tags, and messages are broadcast to all teammates. The chatroom viewer polls for new messages in real time — type a message and press Enter to post, or press q/Esc to quit.
-
-**API endpoints:**
-
-| Method | Endpoint | Description |
-| ------ | -------- | ----------- |
-| GET | `/api/chatroom/:teamId` | Get messages (`?limit=100&since=0`) |
-| POST | `/api/chatroom/:teamId` | Post a message (`body: { "message": "..." }`) |
-
-### Provider & Custom Provider Commands
-
-| Command | Description | Example |
-| ------- | ----------- | ------- |
-| `provider [name]` | Show or switch global AI provider | `zoobot provider anthropic` |
-| `provider <name> --model <model>` | Switch provider and model | `zoobot provider groq --model llama-3.3-70b-versatile` |
-| `groq set-key <key>` | Set your Groq API key | `zoobot groq set-key gsk_...` |
-
-### Groq Commands (FREE AI)
-
-| Command | Description | Example |
-| ------- | ----------- | ------- |
-| `groq set-key <key>` | Set Groq API key | `zoobot groq set-key YOUR_KEY` |
-| `groq models` | List available Groq models | `zoobot groq models` |
-
-### Model Commands
-
-| Command | Description | Example |
-| ------- | ----------- | ------- |
-| `model [name]` | Show or set global default model | `zoobot model sonnet` |
-| `model list` | List all available models | `zoobot model list` |
-
-### Settings Commands
-
-| Command | Description | Example |
-| ------- | ----------- | ------- |
-| `settings` | Open settings.json in editor | `zoobot settings` |
-| `setup` | Re-run setup wizard | `zoobot setup` |
-
-### Update Commands
-
-| Command | Description | Example |
-| ------- | ----------- | ------- |
-| `update` | Update ZooBot to latest version | `zoobot update` |
-| `update --check` | Check for updates without installing | `zoobot update --check` |
-
----
-
-## 📐 Architecture
-
-```
-┌────────────────────────────────────────────────────────────────┐
-│                     Message Channels                            │
-│              (Discord, Telegram, WhatsApp)                     │
-└──────────────────────────┬─────────────────────────────────────┘
-                           │
-                           │ User sends: "@coder fix the auth bug"
-                           ↓
-┌────────────────────────────────────────────────────────────────┐
-│                      Queue Processor                            │
-│  • Parses @agent_id routing prefix                             │
-│  • Falls back to default agent if no prefix                    │
-│  • Loads agent configuration from settings.json                │
-└──────────────────────────┬─────────────────────────────────────┘
-                           │
-                           ↓
-┌────────────────────────────────────────────────────────────────┐
-│                       Agent Router                             │
-│                                                                 │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐        │
-│  │ @coder      │  │ @writer      │  │ @zoobot      │        │
-│  │ (default)   │  │              │  │ (fallback)   │        │
-│  │             │  │              │  │              │        │
-│  │ Provider:   │  │ Provider:    │  │ Provider:    │        │
-│  │ groq        │  │ anthropic    │  │ groq          │        │
-│  │ Model:      │  │ Model:       │  │ Model:        │        │
-│  │ llama-3.3   │  │ sonnet       │  │ llama-3.3     │        │
-│  │             │  │              │  │              │        │
-│  │ Workspace:  │  │ Workspace:   │  │ Workspace:    │        │
-│  │ ~/zoobot-   │  │ ~/zoobot-   │  │ ~/zoobot-     │        │
-│  │   workspace/ │  │   workspace/ │  │   workspace/  │        │
-│  │   coder/     │  │   writer/    │  │   zoobot/     │        │
-│  └──────────────┘  └──────────────┘  └──────────────┘        │
-│                                                                 │
-│  Shared: ~/.zoobot/ (channels, files, logs, zoobot.db)        │
-└────────────────────────────────────────────────────────────────┘
+zoobot groq set-key <key>  # Set Groq API key
 ```
 
 ---
 
 ## 🌐 ZooOffice Web Portal
 
-ZooBot includes a web portal for managing your agents, teams, tasks, and chat — all from the browser.
+ZooBot includes a full-featured web dashboard:
 
 <div align="center">
-  <img src="./docs/assets/zoobot-office.png" alt="ZooOffice Office View" width="700" />
+  <img src="./docs/assets/zoobot-office.png" alt="ZooOffice Dashboard" width="800" />
 </div>
 
-Once you start running ZooBot locally, you can control it by visiting **[office.zoobot.ai](https://office.zoobot.ai/)**. It connects to your local ZooBot API at `localhost:3777` — no account or sign-up needed.
+Features:
+- **Dashboard** — Real-time queue overview and event feed
+- **Chat** — Send messages to any agent or team
+- **Agents & Teams** — Create, edit, remove
+- **Kanban Board** — Drag tasks across stages, assign to agents
+- **Logs** — Full streaming event log
+- **Settings** — Edit config via UI
 
-Alternatively, you can run ZooOffice locally:
+### Running ZooOffice
 
 ```bash
-zoobot office  # Builds and starts on http://localhost:3000
+zoobot office   # Starts on http://localhost:3000
 ```
 
-**ZooOffice Features:**
-
-- **Dashboard** - Real-time queue/system overview and live event feed
-- **Chat Console** - Send messages to default agent, `@agent`, or `@team`
-- **Agents & Teams** - Create, edit, and remove agents/teams
-- **Tasks (Kanban)** - Create tasks, drag across stages, assign to agent/team
-- **Logs & Events** - Inspect queue logs and streaming events
-- **Settings** - Edit ZooBot configuration (`settings.json`) via UI
-- **Office View** - Visual simulation of agent interactions
-- **Org Chart** - Hierarchical visualization of teams and agents
-- **Chat Rooms** - Slack-style persistent chat rooms per team
-- **Projects** - Project-level task management with filtered kanban boards
+Or visit **[office.zoobotcompany.com](https://office.zoobotcompany.com)** — it connects to your local ZooBot at `localhost:3777`.
 
 ---
 
-## 🔧 Channel Setup
+## 🐛 Troubleshooting
 
-### Discord Setup
+```bash
+# Reset everything (preserves settings)
+zoobot stop && rm -rf ~/.zoobot/queue/* && zoobot start
 
-1. Go to [Discord Developer Portal](https://discord.com/developers/applications)
-2. Create application → Bot section → Create bot
-3. Copy bot token
-4. Enable "Message Content Intent"
-5. Invite bot using OAuth2 URL Generator
+# Reset WhatsApp
+zoobot channels reset whatsapp
 
-### Telegram Setup
+# Check status
+zoobot status
 
-1. Open Telegram → Search `@BotFather`
-2. Send `/newbot` → Follow prompts
-3. Copy bot token
-4. Start chat with your bot
-
-### WhatsApp Setup
-
-After starting ZooBot, scan the QR code:
-
+# View logs
+zoobot logs all
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-     WhatsApp QR Code
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[QR CODE HERE]
 
-📱 Settings → Linked Devices → Link a Device
-```
+Common issues:
+
+| Problem | Fix |
+|---------|-----|
+| WhatsApp not connecting | `zoobot channels reset whatsapp` |
+| Messages stuck | `rm -rf ~/.zoobot/queue/processing/*` |
+| Agent not found | `zoobot agent list` |
+| Groq not working | Set key: `export GROQ_API_KEY=your_key` |
+| Corrupted settings.json | ZooBot auto-repairs on next start |
 
 ---
 
-## 📂 External Integrations
+## 🙏 Credits
 
-ZooBot includes the [everything-claude-code](https://github.com/affaan-m/everything-claude-code) skill system as a submodule — the complete agent harness performance optimization system with skills, instincts, memory, security, and research-first development patterns.
+Built by **@KaiNovasWarm** on X/Twitter — [https://x.com/KaiNovasWarm](https://x.com/KaiNovasWarm)
+
+Powered by **Groq** for free, fast AI inference — [console.groq.com](https://console.groq.com)
+
+Built on Claude Code and Codex CLI.
+
+Uses discord.js, whatsapp-web.js, node-telegram-bot-api.
 
 ---
 
 ## 📄 License
 
-MIT License — see [LICENSE](LICENSE) file.
-
----
-
-<p align="center">
-  Built with ❤️ by <a href="https://x.com/KaiNovasWarm">@KaiNovasWarm</a>
-</p>
+MIT — free to use, modify, and distribute.
