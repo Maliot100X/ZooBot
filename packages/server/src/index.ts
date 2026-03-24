@@ -28,7 +28,14 @@ import agentMessagesRoutes from './routes/agent-messages';
 import servicesRoutes from './routes/services';
 import schedulesRoutes from './routes/schedules';
 
-const API_PORT = parseInt(process.env.ZOOBOT_API_PORT || '3777', 10);
+export function resolveApiPort(): number {
+    const raw = process.env.ZOOBOT_API_PORT || '3777';
+    const port = parseInt(raw, 10);
+    if (!Number.isInteger(port) || port < 1 || port > 65535) {
+        throw new Error(`Invalid ZOOBOT_API_PORT: ${raw}`);
+    }
+    return port;
+}
 
 /**
  * Create and start the API server.
@@ -84,9 +91,9 @@ export function startApiServer(): http.Server {
 
     const server = serve({
         fetch: app.fetch,
-        port: API_PORT,
+        port: resolveApiPort(),
     }, () => {
-        log('INFO', `API server listening on http://localhost:${API_PORT}`);
+        log('INFO', `API server listening on http://localhost:${resolveApiPort()}`);
     });
 
     return server as unknown as http.Server;

@@ -1,4 +1,4 @@
-const DEFAULT_API_BASE = "http://localhost:3777";
+const DEFAULT_API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3777";
 const STORAGE_KEY = "zoobot_api_base";
 
 /** Resolve the API base URL. Priority: env > localStorage > default. */
