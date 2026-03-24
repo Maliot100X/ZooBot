@@ -52,6 +52,8 @@ export interface Settings {
         };
         groq?: {
             model?: string;
+            auth_token?: string;
+            base_url?: string;
         };
     };
     agents?: Record<string, AgentConfig>;

@@ -7,7 +7,7 @@ import { readSettings, writeSettings, requireSettings } from './shared.ts';
 function providerShow() {
     const settings = requireSettings();
     const provider = settings.models?.provider || 'anthropic';
-    const modelSection = provider === 'openai' ? settings.models?.openai : settings.models?.anthropic;
+    const modelSection = (settings.models as Record<string, any>)?.[provider];
     const model = modelSection?.model || '';
 
     if (model) {
@@ -35,16 +35,20 @@ function providerSet(providerName: string, args: string[]) {
     // Parse flags
     let modelArg = '';
     let authTokenArg = '';
+    let baseUrlArg = '';
     for (let i = 0; i < args.length; i++) {
         if (args[i] === '--model' && args[i + 1]) {
             modelArg = args[++i];
         } else if (args[i] === '--auth-token' && args[i + 1]) {
             authTokenArg = args[++i];
+        } else if (args[i] === '--base-url' && args[i + 1]) {
+            baseUrlArg = args[++i];
         }
     }
 
-    if (providerName !== 'anthropic' && providerName !== 'openai') {
-        p.log.error('Usage: provider {anthropic|openai} [--model MODEL] [--auth-token TOKEN]');
+    // Support anthropic, openai, groq, and custom providers
+    if (providerName !== 'anthropic' && providerName !== 'openai' && providerName !== 'groq') {
+        p.log.error('Usage: provider {anthropic|openai|groq} [--model MODEL] [--auth-token TOKEN]');
         process.exit(1);
     }
 
@@ -54,8 +58,10 @@ function providerSet(providerName: string, args: string[]) {
     settings.models.provider = providerName;
 
     if (modelArg) {
-        if (!settings.models[providerName]) settings.models[providerName] = {};
-        (settings.models as any)[providerName].model = modelArg;
+        if (!settings.models[providerName as keyof typeof settings.models]) {
+            (settings.models as Record<string, any>)[providerName] = {};
+        }
+        (settings.models as Record<string, any>)[providerName].model = modelArg;
 
         // Propagate to agents matching old provider
         const agents = settings.agents || {};
@@ -68,24 +74,39 @@ function providerSet(providerName: string, args: string[]) {
             }
         }
 
-        p.log.success(`Switched to ${providerName === 'anthropic' ? 'Anthropic' : 'OpenAI/Codex'} provider with model: ${modelArg}`);
+        const providerLabel = providerName === 'anthropic' ? 'Anthropic' : providerName === 'openai' ? 'OpenAI/Codex' : 'Groq';
+        p.log.success(`Switched to ${providerLabel} provider with model: ${modelArg}`);
         if (updatedCount > 0) {
             p.log.message(`  Updated ${updatedCount} agent(s) from ${oldProvider} to ${providerName}/${modelArg}`);
         }
     } else {
-        p.log.success(`Switched to ${providerName === 'anthropic' ? 'Anthropic' : 'OpenAI/Codex'} provider`);
+        const providerLabel = providerName === 'anthropic' ? 'Anthropic' : providerName === 'openai' ? 'OpenAI/Codex' : 'Groq';
+        p.log.success(`Switched to ${providerLabel} provider`);
         if (providerName === 'openai') {
-            p.log.message("Use 'zoobot model {gpt-5.3-codex|gpt-5.2}' to set the model.");
+            p.log.message("Use 'zoobot model gpt-5.3-codex' to set the model.");
             p.log.message("Note: Make sure you have the 'codex' CLI installed.");
+        } else if (providerName === 'groq') {
+            p.log.message("Use 'zoobot model llama-3.3-70b-versatile' to set the model.");
+            p.log.message("Groq is free and uses OpenAI-compatible API.");
         } else {
-            p.log.message("Use 'zoobot model {sonnet|opus}' to set the model.");
+            p.log.message("Use 'zoobot model sonnet' or 'zoobot model opus' to set the model.");
         }
     }
 
     if (authTokenArg) {
-        if (!settings.models[providerName]) settings.models[providerName] = {};
-        (settings.models as any)[providerName].auth_token = authTokenArg;
-        p.log.success(`${providerName === 'anthropic' ? 'Anthropic' : 'OpenAI'} auth token saved`);
+        if (!settings.models[providerName as keyof typeof settings.models]) {
+            (settings.models as Record<string, any>)[providerName] = {};
+        }
+        (settings.models as Record<string, any>)[providerName].auth_token = authTokenArg;
+        p.log.success(`${providerName === 'anthropic' ? 'Anthropic' : providerName === 'groq' ? 'Groq' : 'OpenAI'} auth token saved`);
+    }
+
+    if (baseUrlArg) {
+        if (!settings.models[providerName as keyof typeof settings.models]) {
+            (settings.models as Record<string, any>)[providerName] = {};
+        }
+        (settings.models as Record<string, any>)[providerName].base_url = baseUrlArg;
+        p.log.success(`Base URL set to: ${baseUrlArg}`);
     }
 
     writeSettings(settings);
@@ -96,7 +117,7 @@ function providerSet(providerName: string, args: string[]) {
 function modelShow() {
     const settings = requireSettings();
     const provider = settings.models?.provider || 'anthropic';
-    const modelSection = provider === 'openai' ? settings.models?.openai : settings.models?.anthropic;
+    const modelSection = (settings.models as Record<string, any>)?.[provider];
     const model = modelSection?.model || '';
 
     if (model) {
@@ -123,20 +144,35 @@ function modelSet(modelName: string) {
     const settings = requireSettings();
 
     // Determine provider from model name
-    const anthropicModels = ['sonnet', 'opus'];
-    const openaiModels = ['gpt-5.2', 'gpt-5.3-codex'];
+    const anthropicModels = ['sonnet', 'opus', 'haiku', 'claude-sonnet-4-6', 'claude-opus-4-6'];
+    const openaiModels = ['gpt-5.2', 'gpt-5.3-codex', 'gpt-4o', 'gpt-4o-mini'];
+    const groqModels = ['llama-3.3-70b-versatile', 'llama-3.1-70b-versatile', 'mixtral-8x7b-32768', 'llama-3.2-90b-vision-preview', 'llama-3.2-11b-vision-preview', 'gemma2-9b-it'];
 
     let targetProvider: string;
     if (anthropicModels.includes(modelName)) {
         targetProvider = 'anthropic';
     } else if (openaiModels.includes(modelName)) {
         targetProvider = 'openai';
+    } else if (groqModels.includes(modelName)) {
+        targetProvider = 'groq';
     } else {
-        p.log.error('Usage: model {sonnet|opus|gpt-5.2|gpt-5.3-codex}');
-        p.log.message('');
-        p.log.message('Anthropic models: sonnet, opus');
-        p.log.message('OpenAI models: gpt-5.2, gpt-5.3-codex');
-        process.exit(1);
+        // Try to detect from prefix
+        if (modelName.startsWith('claude-')) {
+            targetProvider = 'anthropic';
+        } else if (modelName.startsWith('gpt-') || modelName.startsWith('o1') || modelName.startsWith('o3')) {
+            targetProvider = 'openai';
+        } else if (modelName.startsWith('llama-') || modelName.startsWith('mixtral-') || modelName.startsWith('gemma')) {
+            targetProvider = 'groq';
+        } else {
+            p.log.error('Unknown model. Usage: model {MODEL_NAME}');
+            p.log.message('');
+            p.log.message('Anthropic models: sonnet, opus, haiku');
+            p.log.message('OpenAI models: gpt-4o, gpt-4o-mini, gpt-5.3-codex');
+            p.log.message('Groq models: llama-3.3-70b-versatile, mixtral-8x7b-32768, gemma2-9b-it');
+            p.log.message('');
+            p.log.message('Or use any OpenAI-compatible model with Groq.');
+            process.exit(1);
+        }
     }
 
     if (!settings.models) settings.models = { provider: targetProvider };
@@ -156,7 +192,8 @@ function modelSet(modelName: string) {
 
     writeSettings(settings);
 
-    p.log.success(`Model switched to: ${modelName}`);
+    const providerLabel = targetProvider === 'anthropic' ? 'Anthropic' : targetProvider === 'openai' ? 'OpenAI' : 'Groq';
+    p.log.success(`Model switched to: ${modelName} (${providerLabel})`);
     if (updatedCount > 0) {
         p.log.message(`  Updated ${updatedCount} ${targetProvider} agent(s)`);
     }
@@ -176,6 +213,7 @@ switch (command) {
         break;
     case 'anthropic':
     case 'openai':
+    case 'groq':
         providerSet(command, args);
         break;
     case 'model':
@@ -187,7 +225,7 @@ switch (command) {
         break;
     default:
         p.log.error(`Unknown provider command: ${command}`);
-        p.log.message('Usage: provider {show|anthropic|openai} [--model MODEL] [--auth-token TOKEN]');
+        p.log.message('Usage: provider {show|anthropic|openai|groq} [--model MODEL] [--auth-token TOKEN]');
         p.log.message('       provider model [name]');
         process.exit(1);
 }

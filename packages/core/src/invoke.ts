@@ -188,6 +188,8 @@ export async function invokeAgent(
             envOverrides.ANTHROPIC_API_KEY = settings.models.anthropic.auth_token;
         } else if (provider === 'openai' && settings.models?.openai?.auth_token) {
             envOverrides.OPENAI_API_KEY = settings.models.openai.auth_token;
+        } else if (provider === 'groq' && settings.models?.groq?.auth_token) {
+            envOverrides.GROQ_API_KEY = settings.models.groq.auth_token;
         }
     }
 
