@@ -437,3 +437,21 @@ MIT
 **ZooBot - Multi-team AI agents for everyone!** 🤖✨
 
 [![Star History Chart](https://api.star-history.com/image?repos=Maliot100X/ZooBot&type=Date&legend=top-left)](https://star-history.com/?repos=Maliot100X/ZooBot&type=Date&legend=top-left)
+
+<!-- omgithub:readme:start -->
+## 🚀 Build, play, and remix with OMGithub
+
+**Remixed using [OMGithub.com](https://omgithub.com).**
+
+[![OMGithub](https://img.shields.io/badge/OMGithub-Open%20project-orange?style=for-the-badge)](https://omgithub.com/Maliot100X/ZooBot)
+[![GitHub](https://img.shields.io/badge/GitHub-Source-181717?logo=github&style=for-the-badge)](https://github.com/Maliot100X/ZooBot)
+
+- 🎮 [Open the project](https://omgithub.com/Maliot100X/ZooBot).
+- ✨ [Remix this project](https://omgithub.com/?remix=Maliot100X%2FZooBot).
+- 💻 [Explore the source](https://github.com/Maliot100X/ZooBot).
+- 🛠️ [Check build runs](https://github.com/Maliot100X/ZooBot/actions).
+- 🐛 [Report an issue](https://github.com/Maliot100X/ZooBot/issues).
+- 👤 [Explore the creator's projects](https://omgithub.com/Maliot100X).
+- 🌍 [Create with OMGithub](https://omgithub.com).
+- 🧬 [Explore the remix source](https://github.com/Maliot100X/ZooBot).
+<!-- omgithub:readme:end -->
